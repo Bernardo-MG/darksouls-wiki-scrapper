@@ -20,7 +20,7 @@ _version_re = re.compile(r'__version__\s+=\s+(.*)')
 here = path.abspath(path.dirname(__file__))
 
 # Gets the version for the source folder __init__.py file
-with open('../../ds-wiki-scrapper/__init__.py', 'rb',
+with open('../../scrapper/__init__.py', 'rb',
           encoding='utf-8') as f:
     version_lib = f.read()
     version_lib = _version_re.search(version_lib).group(1)
@@ -29,7 +29,7 @@ with open('../../ds-wiki-scrapper/__init__.py', 'rb',
 # -- Code location --------------------------------------------------------
 
 sys.path.append(os.path.abspath('../..'))
-sys.path.append(os.path.abspath('../../ds-wiki-scrapper'))
+sys.path.append(os.path.abspath('../../scrapper'))
 
 
 # -- General configuration ------------------------------------------------
@@ -104,14 +104,14 @@ html_theme_options = {
     'publish_date': datetime.datetime.now().date(),
     'years': datetime.datetime.now().year,
     'scm_name': 'Github',
-    'scm_url': 'https://github.com/Bernardo-MG/ds-wiki-scrapper',
+    'scm_url': 'https://github.com/Bernardo-MG/darksouls-wiki-scrapper',
     'ci_name': 'Github',
-    'ci_url': 'https://github.com/Bernardo-MG/ds-wiki-scrapper/actions',
+    'ci_url': 'https://github.com/Bernardo-MG/darksouls-wiki-scrapper/actions',
     'issues_name': 'Github',
-    'issues_url': 'https://github.com/Bernardo-MG/ds-wiki-scrapper/issues',
+    'issues_url': 'https://github.com/Bernardo-MG/darksouls-wiki-scrapper/issues',
     'releases_repos': [
         ('Pypi',
-         'https://pypi.python.org/pypi/ds-wiki-scrapper')],
+         'https://pypi.python.org/pypi/darksouls-wiki-scrapper')],
     'general_info_links': [('Acquire', './acquire.html'),
                            ('Usage', './usage.html')],
     'navbar_links': [('Documentation', [('Acquire', './acquire.html'),

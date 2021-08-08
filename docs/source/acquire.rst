@@ -8,7 +8,7 @@ For this, just use the following command:
 
 .. code::
 
-    pip install ds-wiki-scrapper
+    pip install darksouls-wiki-scrapper
 
 If needed, manual installation is possible:
 
@@ -16,4 +16,4 @@ If needed, manual installation is possible:
 
     python setup.py install
 
-.. _PyPi: https://pypi.python.org/pypi/ds-wiki-scrapper
+.. _PyPi: https://pypi.python.org/pypi/darksouls-wiki-scrapper

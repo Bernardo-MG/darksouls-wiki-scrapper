@@ -18,7 +18,7 @@ This is prepared for easing the generation of deployment files.
 __license__ = 'MIT'
 
 # Source package
-_source_package = 'ds-wiki-scrapper/'
+_source_package = 'scrapper/'
 
 # Test requirements
 _tests_require = ['tox']
@@ -33,7 +33,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name='ds-wiki-scrapper',
+    name='darksouls-wiki-scrapper',
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -43,8 +43,8 @@ setup(
     author='Bernardo Martínez Garrido',
     author_email='programming@bernardomg.com',
     license='MIT',
-    url='https://github.com/Bernardo-MG/ds-wiki-scrapper',
-    download_url='https://pypi.python.org/pypi/ds-wiki-scrapper',
+    url='https://github.com/Bernardo-MG/darksouls-wiki-scrapper',
+    download_url='https://pypi.python.org/pypi/darksouls-wiki-scrapper',
     keywords=[],
     platforms='any',
     classifiers=[

@@ -2,37 +2,19 @@
 Dark Souls Wiki Scrapper
 ===============================
 
-This is a project created with the `Cookiecutter Python Library
-<https://github.com/Bernardo-MG/cookiecutter-python-library>`_ template and
-ready to be used for creating a new Python library.
-
-Just check the readme and docs, to adapt them to your project, and it is done.
-
-Remember that if you want to create a new project it is better just reusing
-the Cookiecutter Python Library template, as this will set up the initial
-project according to a few pieces of data it will ask for.
-
-.. image:: https://badge.fury.io/py/ds-wiki-scrapper.svg
-    :target: https://pypi.python.org/pypi/ds-wiki-scrapper
-    :alt: Dark Souls Wiki Scrapper Pypi package page
+A scrapper to gather data from the Dark Souls wiki.
 
 .. image:: https://img.shields.io/badge/docs-release-blue.svg
-    :target: http://docs.bernardomg.com/ds-wiki-scrapper
+    :target: http://docs.bernardomg.com/darksouls-wiki-scrapper
     :alt: Dark Souls Wiki Scrapper latest documentation Status
 .. image:: https://img.shields.io/badge/docs-develop-blue.svg
-    :target: http://docs.bernardomg.com/development/ds-wiki-scrapper
+    :target: http://docs.bernardomg.com/development/darksouls-wiki-scrapper
     :alt: Dark Souls Wiki Scrapper development documentation Status
 
 Features
 --------
 
-- Github Workflow configuration file
-- Customized setup.py module to minimize configuration, and using tox for the tests
-- Docs using `Sphinx`_ and the `Sphinx Docs Theme <https://github.com/Bernardo-MG/sphinx-docs-theme>`_
-- Prepared to run tests through tox
-- Prepared to run tests on Python 2 and 3
-- Prepared to run tests on pypy and pypy 3
-- Prepared to run tests for the `Sphinx`_ documentation
+- Scrapper for the Dark Souls wiki
 
 Documentation
 -------------
@@ -64,7 +46,7 @@ Installing
 The project is offered as a `Pypi package`_, and using pip is the preferred way
 to install it. For this use the following command;
 
-``pip install ds-wiki-scrapper``
+``pip install darksouls-wiki-scrapper``
 
 If needed, manual installation is possible:
 
@@ -115,10 +97,10 @@ License
 
 The project has been released under the `MIT License`_.
 
-.. _GitHub project page: https://github.com/Bernardo-MG/ds-wiki-scrapper
-.. _latest docs: http://docs.bernardomg.com/ds-wiki-scrapper
-.. _development docs: http://docs.bernardomg.com/development/ds-wiki-scrapper
-.. _Pypi package: https://pypi.python.org/pypi/ds-wiki-scrapper
+.. _GitHub project page: https://github.com/Bernardo-MG/darksouls-wiki-scrapper
+.. _latest docs: http://docs.bernardomg.com/darksouls-wiki-scrapper
+.. _development docs: http://docs.bernardomg.com/development/darksouls-wiki-scrapper
+.. _Pypi package: https://pypi.python.org/pypi/darksouls-wiki-scrapper
 .. _MIT License: http://www.opensource.org/licenses/mit-license.php
-.. _project issues tracker: https://github.com/Bernardo-MG/ds-wiki-scrapper/issues
+.. _project issues tracker: https://github.com/Bernardo-MG/darksouls-wiki-scrapper/issues
 .. _Sphinx: http://sphinx-doc.org/

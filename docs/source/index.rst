@@ -2,16 +2,13 @@
 Dark Souls Wiki Scrapper
 ===============================
 
-This is the documentation for a Python library. Change all the placeholder
-texts with actual information.
+A scrapper to gather data from the Dark Souls wiki.
 
 --------
 Features
 --------
 
-- A feature
-- Another feature
-- A third feature
+- Scrapper for the Dark Souls wiki
 
 .. toctree::
    :hidden:

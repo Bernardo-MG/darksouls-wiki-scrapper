@@ -43,11 +43,6 @@ These can be installed with:
 Installing
 ~~~~~~~~~~
 
-The project is offered as a `Pypi package`_, and using pip is the preferred way
-to install it. For this use the following command;
-
-``pip install darksouls-wiki-scrapper``
-
 If needed, manual installation is possible:
 
 ``python setup.py install``
@@ -100,7 +95,6 @@ The project has been released under the `MIT License`_.
 .. _GitHub project page: https://github.com/Bernardo-MG/darksouls-wiki-scrapper
 .. _latest docs: http://docs.bernardomg.com/darksouls-wiki-scrapper
 .. _development docs: http://docs.bernardomg.com/development/darksouls-wiki-scrapper
-.. _Pypi package: https://pypi.python.org/pypi/darksouls-wiki-scrapper
 .. _MIT License: http://www.opensource.org/licenses/mit-license.php
 .. _project issues tracker: https://github.com/Bernardo-MG/darksouls-wiki-scrapper/issues
 .. _Sphinx: http://sphinx-doc.org/

@@ -44,7 +44,6 @@ setup(
     author_email='programming@bernardomg.com',
     license='MIT',
     url='https://github.com/Bernardo-MG/darksouls-wiki-scrapper',
-    download_url='https://pypi.python.org/pypi/darksouls-wiki-scrapper',
     keywords=[],
     platforms='any',
     classifiers=[

@@ -109,9 +109,6 @@ html_theme_options = {
     'ci_url': 'https://github.com/Bernardo-MG/darksouls-wiki-scrapper/actions',
     'issues_name': 'Github',
     'issues_url': 'https://github.com/Bernardo-MG/darksouls-wiki-scrapper/issues',
-    'releases_repos': [
-        ('Pypi',
-         'https://pypi.python.org/pypi/darksouls-wiki-scrapper')],
     'general_info_links': [('Acquire', './acquire.html'),
                            ('Usage', './usage.html')],
     'navbar_links': [('Documentation', [('Acquire', './acquire.html'),

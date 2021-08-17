@@ -112,7 +112,7 @@ class BaseListScrapper(BaseScrapper):
             if index % 10 == 0:
                 self.logger.info('Scrapping URL {} of {}'.format(index, len(sub_urls)))
             scrapped = self.scrap_inner_page(sub_url)
-            if isinstance(data, list):
+            if isinstance(scrapped, list):
                 data = data + scrapped
             else:
                 data.append(scrapped)

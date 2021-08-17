@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-from scrapper.base import BaseListDescriptionScrapper
-
+import requests
+from bs4 import BeautifulSoup
+from scrapper.base import BaseListDescriptionScrapper, BaseListScrapper
 
 """
 Listing scrappers
@@ -11,9 +10,6 @@ Listing scrappers
 
 __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
-
-
-logger = logging.getLogger(os.path.basename(__file__))
 
 
 class AmmunitionScrapper(BaseListDescriptionScrapper):
@@ -207,3 +203,26 @@ class WeaponScrapper(BaseListDescriptionScrapper):
         main_list = main_list + dom.select('h2:has(> span#Weapons) + table + table li a')
 
         return main_list
+
+
+class EnemyScrapper(BaseListScrapper):
+    """
+    Weapon list scrapper.
+    """
+
+    def __init__(self, root):
+        super(EnemyScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Enemies', 'output/enemies.csv', ['name', 'url'])
+
+    def extract_list_links(self, dom):
+        result = dom.select('li a.category-page__member-link')
+
+        return filter(lambda item: not 'Thread:' in item['title'], result)
+
+    def scrap_inner_page(self, sub_url):
+        html = requests.get(sub_url)
+        dom = BeautifulSoup(html.text, 'html.parser')
+
+        # Name
+        name = dom.select('h1#firstHeading')[0].get_text()
+
+        return {'name': name, 'url': sub_url}

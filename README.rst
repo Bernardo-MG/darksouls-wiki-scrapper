@@ -40,18 +40,12 @@ These can be installed with:
 
 ``pip install --upgrade -r requirements.txt``
 
-Installing
-~~~~~~~~~~
-
-If needed, manual installation is possible:
-
-``python setup.py install``
-
 Usage
 -----
 
-The application has been coded in Python, and does not require any particular
-framework.
+The runner file takes care of executing the scrappers:
+
+``python runner.py``
 
 Testing
 -------

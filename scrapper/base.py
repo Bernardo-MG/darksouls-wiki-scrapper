@@ -48,7 +48,17 @@ class DataCleaner:
             item[self.key] = re.sub(" \(.*\)", "", item[self.key])
 
 
-class BaseScrapper(ABC):
+class Scrapper(ABC):
+    """
+    Scrapper interface.
+    """
+
+    @abstractmethod
+    def scrap(self):
+        raise NotImplementedError
+
+
+class BaseScrapper(Scrapper):
     """
     Generic scrapper.
     """
@@ -144,22 +154,20 @@ class BaseListScrapper(BaseScrapper):
         pass
 
 
-class BaseListDescriptionScrapper(BaseListScrapper):
+class DescriptionScrapper(ABC):
     """
-    Scrapper for list pages. Will find all the subpages and scrap each of them.
-
-    This is ready for pages based on a name and description set.
+    Scrapper for pages with description.
     """
 
-    def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'])
+    def __init__(self):
+        super(DescriptionScrapper, self).__init__()
 
-    def scrap_inner_page(self, sub_url):
-        html = requests.get(sub_url)
+    def scrap(self, url):
+        html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
+        name = dom.select('h1#firstHeading')[0].get_text().strip()
 
         # Description
         description = dom.select('div.mainbg dd i')
@@ -170,7 +178,22 @@ class BaseListDescriptionScrapper(BaseListScrapper):
 
         description = '\\n'.join(info)
 
-        return {'name': name, 'url': sub_url, 'description': description}
+        return {'name': name, 'url': url, 'description': description}
+
+
+class BaseListDescriptionScrapper(BaseListScrapper):
+    """
+    Scrapper for list pages. Will find all the subpages and scrap each of them.
+
+    This is ready for pages based on a name and description set.
+    """
+
+    def __init__(self, root_url, list_page, output_file):
+        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'])
+        self.innerPageScrapper = DescriptionScrapper()
+
+    def scrap_inner_page(self, sub_url):
+        return self.innerPageScrapper.scrap(sub_url)
 
     @abstractmethod
     def extract_list_links(self, dom):

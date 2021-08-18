@@ -10,6 +10,9 @@ Classes to help when scrapping.
 
 
 class CsvExport:
+    """
+    Stores data into a CSV file. This file will be created, destroying any previous file.
+    """
 
     def __init__(self, output_file, headers):
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -28,6 +31,10 @@ class CsvExport:
 
 
 class DataCleaner:
+    """
+    Cleans up the data before saving. As it may contain several formatting errors, this class will make sure it is
+    readable.
+    """
 
     def __init__(self, key):
         self.key = key

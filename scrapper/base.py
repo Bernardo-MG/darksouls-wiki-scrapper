@@ -25,9 +25,9 @@ class Scrapper(ABC):
         raise NotImplementedError
 
 
-class BaseScrapper(Scrapper):
+class CsvScrapper(Scrapper):
     """
-    Generic scrapper.
+    Scraps a page, cleans up the data and stores it into a CSV file.
     """
 
     def __init__(self, url, output_file, headers):

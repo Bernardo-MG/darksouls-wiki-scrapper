@@ -148,34 +148,6 @@ class DescriptionScrapper(ABC):
 
         return {'name': name, 'url': url, 'description': description}
 
-
-class BaseListDescriptionScrapper(BaseListScrapper):
-    """
-    Scrapper for list pages. Will find all the subpages and scrap each of them.
-
-    This is ready for pages based on a name and description set.
-    """
-
-    def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'])
-        self.innerPageScrapper = DescriptionScrapper()
-
-    def scrap_inner_page(self, sub_url):
-        return self.innerPageScrapper.scrap(sub_url)
-
-    @abstractmethod
-    def extract_list_links(self, dom):
-        """
-        Extracts the links for the subpages from the DOM.
-
-        Returns
-        -------
-        list
-            a list of link elements
-        """
-        pass
-
-
 class BaseNameListScrapper(BaseScrapper):
     """
     Scrapper for name list pages. Will find all the names in a page and store them in a list.

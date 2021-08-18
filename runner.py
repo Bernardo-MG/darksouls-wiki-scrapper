@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from scrapper.list_description import *
 from scrapper.list import *
 from scrapper.relation import *
 from scrapper.misc import *

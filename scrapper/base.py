@@ -37,11 +37,9 @@ class BaseScrapper(Scrapper):
         self.cleaner = DataCleaner(headers[0])
 
     def scrap(self):
-        list_url = self.url
+        self.logger.info('Scrapping %s', self.url)
 
-        self.logger.info('Scrapping %s', list_url)
-
-        html = requests.get(list_url)
+        html = requests.get(self.url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
         data = self.scrap_data(dom)
@@ -52,7 +50,7 @@ class BaseScrapper(Scrapper):
         # Exports data
         self.exporter.export(data)
 
-        self.logger.info('Finished scrapping %s', list_url)
+        self.logger.info('Finished scrapping %s', self.url)
 
     @abstractmethod
     def scrap_data(self, dom):
@@ -82,12 +80,14 @@ class BaseListScrapper(BaseScrapper):
         sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
 
         self.logger.info('Found %d inner pages to scrap', len(sub_urls))
+        self.logger.debug('Inner pages: %s', len(sub_urls))
 
         # Scraps inner pages
         data = []
         for index, sub_url in enumerate(sub_urls):
             if index % 10 == 0:
                 self.logger.info('Scrapping URL %d of %d', index, len(sub_urls))
+            self.logger.debug('Scrapping inner page: %s', sub_url)
             scrapped = self.scrap_inner_page(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped

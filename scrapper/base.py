@@ -30,13 +30,12 @@ class CsvExport:
             output_writer.writeheader()
             output_writer.writerows(data)
 
-        self.logger.info('Saved {} rows to {}'.format(len(data), self.output_file))
+        self.logger.info('Saved %d rows to %s', len(data), self.output_file)
 
 
 class DataCleaner:
 
     def __init__(self, key):
-        self.logger = logging.getLogger(self.__class__.__name__)
         self.key = key
 
     def clean_up(self, data):
@@ -72,7 +71,7 @@ class BaseScrapper(Scrapper):
     def scrap(self):
         list_url = self.url
 
-        self.logger.info('Scrapping {}'.format(list_url))
+        self.logger.info('Scrapping %s', list_url)
 
         html = requests.get(list_url)
         dom = BeautifulSoup(html.text, 'html.parser')
@@ -85,7 +84,7 @@ class BaseScrapper(Scrapper):
         # Exports data
         self.exporter.export(data)
 
-        self.logger.info('Finished scrapping {}'.format(list_url))
+        self.logger.info('Finished scrapping %s', list_url)
 
     @abstractmethod
     def scrap_data(self, dom):
@@ -114,13 +113,13 @@ class BaseListScrapper(BaseScrapper):
 
         sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
 
-        self.logger.info('Found {} inner pages to scrap'.format(len(sub_urls)))
+        self.logger.info('Found %d inner pages to scrap', len(sub_urls))
 
         # Scraps inner pages
         data = []
         for index, sub_url in enumerate(sub_urls):
             if index % 10 == 0:
-                self.logger.info('Scrapping URL {} of {}'.format(index, len(sub_urls)))
+                self.logger.info('Scrapping URL %d of %d', index, len(sub_urls))
             scrapped = self.scrap_inner_page(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped

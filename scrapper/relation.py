@@ -13,8 +13,6 @@ Relationships scrappers
 __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
-logger = logging.getLogger(os.path.basename(__file__))
-
 
 class ArmorSetScrapper(BaseNameListScrapper):
     """

@@ -39,12 +39,15 @@ class DataCleaner:
         self.key = key
 
     def clean_up(self, data):
-        # Sorts data by name
+        # Sorts data by defined key
         data = sorted(data, key=lambda d: d[self.key])
 
         # Removes data in parenthesis from name
         for item in data:
-            item[self.key] = re.sub(" \(.*\)", "", item[self.key])
+            value = item[self.key]
+            value = re.sub(" \(.*\)", "", value)
+            value = value.strip()
+            item[self.key] = value
 
 
 class Scrapper(ABC):
@@ -161,12 +164,13 @@ class DescriptionScrapper(ABC):
     def __init__(self):
         super(DescriptionScrapper, self).__init__()
 
-    def scrap(self, url):
+    @staticmethod
+    def scrap(url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Name
-        name = dom.select('h1#firstHeading')[0].get_text().strip()
+        name = dom.select('h1#firstHeading')[0].get_text()
 
         # Description
         description = dom.select('div.mainbg dd i')

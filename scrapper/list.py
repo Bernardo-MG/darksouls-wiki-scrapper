@@ -223,6 +223,6 @@ class EnemyScrapper(BaseListScrapper):
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Name
-        name = dom.select('h1#firstHeading')[0].get_text().strip()
+        name = dom.select('h1#firstHeading')[0].get_text()
 
         return {'name': name, 'url': sub_url}

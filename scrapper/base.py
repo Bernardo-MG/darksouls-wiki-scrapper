@@ -34,6 +34,7 @@ class CsvScrapper(Scrapper):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.url = url
         self.exporter = CsvExport(output_file, headers)
+        # Data sorted by the first header
         self.cleaner = DataCleaner(headers[0])
 
     def scrap(self):

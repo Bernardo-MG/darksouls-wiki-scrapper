@@ -70,9 +70,10 @@ class BaseListScrapper(BaseScrapper):
     Scrapper for list pages. Will find all the subpages and scrap each of them.
     """
 
-    def __init__(self, root_url, list_page, output_file, headers):
+    def __init__(self, root_url, list_page, output_file, headers, inner_page_scrapper):
         super(BaseListScrapper, self).__init__(root_url + list_page, output_file, headers)
         self.root_url = root_url
+        self.inner_page_scrapper = inner_page_scrapper
 
     def scrap_data(self, dom):
         main_list = self.extract_list_links(dom)
@@ -88,25 +89,13 @@ class BaseListScrapper(BaseScrapper):
             if index % 10 == 0:
                 self.logger.info('Scrapping URL %d of %d', index, len(sub_urls))
             self.logger.debug('Scrapping inner page: %s', sub_url)
-            scrapped = self.scrap_inner_page(sub_url)
+            scrapped = self.inner_page_scrapper.scrap(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped
             else:
                 data.append(scrapped)
 
         return data
-
-    @abstractmethod
-    def scrap_inner_page(self, sub_url):
-        """
-        Parses an inner page.
-
-        Returns
-        -------
-        data
-            list of data parsed from the page
-        """
-        pass
 
     @abstractmethod
     def extract_list_links(self, dom):

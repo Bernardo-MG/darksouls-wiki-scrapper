@@ -42,11 +42,8 @@ class BaseListDescriptionScrapper(BaseListScrapper):
     """
 
     def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'])
-        self.innerPageScrapper = DescriptionScrapper()
-
-    def scrap_inner_page(self, sub_url):
-        return self.innerPageScrapper.scrap(sub_url)
+        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'],
+                                                          DescriptionScrapper())
 
     @abstractmethod
     def extract_list_links(self, dom):

@@ -39,7 +39,7 @@ class ArmorSetRelsScrapper(BaseListScrapper):
 
         return data
 
-    def extract_list_links(self, dom):
+    def _extract_links(self, dom):
         return dom.select('div[title="Sets"] li a')
 
 
@@ -65,7 +65,7 @@ class ShieldTypeRelsScrapper(BaseListScrapper):
 
         return {'shield': name, 'type': type}
 
-    def extract_list_links(self, dom):
+    def _extract_links(self, dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')
 
 
@@ -95,7 +95,7 @@ class WeaponTypeRelsScrapper(BaseListScrapper):
 
         return {'weapon': name, 'type': type}
 
-    def extract_list_links(self, dom):
+    def _extract_links(self, dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')
         main_list = main_list + dom.select('h2:has(> span#Weapons) + table + table li a')
 

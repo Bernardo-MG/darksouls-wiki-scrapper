@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import logging
 from abc import ABC, abstractmethod
 
-from scrapper.util import CsvExport, DataCleaner
+from scrapper.util import CsvExporter, DataCleaner
 
 """
 Base scrappers
@@ -23,17 +23,19 @@ class CsvScrapper(ABC):
     def __init__(self, url, output_file, headers):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.url = url
-        self.exporter = CsvExport(output_file, headers)
+        self.exporter = CsvExporter(output_file, headers)
         # Data sorted by the first header
         self.cleaner = DataCleaner(headers[0])
 
     def scrap(self):
         self.logger.info('Scrapping %s', self.url)
 
+        # Parses the DOM from the HTML page
         html = requests.get(self.url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
-        data = self.scrap_data(dom)
+        # Transforms DOM into the output data
+        data = self._transform(dom)
 
         # Cleans up data
         self.cleaner.clean_up(data)
@@ -44,7 +46,7 @@ class CsvScrapper(ABC):
         self.logger.info('Finished scrapping %s', self.url)
 
     @abstractmethod
-    def scrap_data(self, dom):
+    def _transform(self, dom):
         """
         Extracts the data from the DOM.
 
@@ -66,8 +68,8 @@ class BaseListScrapper(CsvScrapper):
         self.root_url = root_url
         self.inner_page_scrapper = inner_page_scrapper
 
-    def scrap_data(self, dom):
-        main_list = self.extract_list_links(dom)
+    def _transform(self, dom):
+        main_list = self._extract_links(dom)
 
         # Takes the relative path and appends it to the root URL
         sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
@@ -90,7 +92,7 @@ class BaseListScrapper(CsvScrapper):
         return data
 
     @abstractmethod
-    def extract_list_links(self, dom):
+    def _extract_links(self, dom):
         """
         Extracts the links for the subpages from the DOM.
 

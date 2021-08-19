@@ -13,7 +13,7 @@ class BaseNameListScrapper(CsvScrapper):
     def __init__(self, root_url, list_page, output_file):
         super(BaseNameListScrapper, self).__init__(root_url + list_page, output_file, ['name'])
 
-    def scrap_data(self, dom):
+    def _transform(self, dom):
         main_list = self.extract_list(dom)
 
         return list(map(lambda item: {'name': item.get_text()}, main_list))

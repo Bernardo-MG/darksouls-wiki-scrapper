@@ -49,5 +49,5 @@ class DialogueScrapper(BaseListScrapper):
 
         return dialogue
 
-    def extract_list_links(self, dom):
+    def _extract_links(self, dom):
         return dom.select('li a.category-page__member-link')

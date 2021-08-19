@@ -8,7 +8,7 @@ Classes to help when scrapping.
 """
 
 
-class CsvExport:
+class CsvExporter:
     """
     Stores data into a CSV file. This file will be created, destroying any previous file.
     """
@@ -19,9 +19,9 @@ class CsvExport:
         self.headers = headers
 
     def export(self, data):
+        # Opens the output file and stores data
         with open(self.output_file, mode='w', newline='') as data_file:
-            fieldnames = self.headers
-            output_writer = csv.DictWriter(data_file, fieldnames=fieldnames)
+            output_writer = csv.DictWriter(data_file, fieldnames=self.headers)
 
             output_writer.writeheader()
             output_writer.writerows(data)

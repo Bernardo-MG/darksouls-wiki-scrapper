@@ -45,7 +45,7 @@ class DataCleaner:
 
         # Removes data in parenthesis from name
         for item in data:
-            value = item[self.key]
-            value = re.sub(" \(.*\)", "", value)
-            value = value.strip()
-            item[self.key] = value
+            for key in item:
+                value = item[key]
+                value = value.strip()
+                item[key] = value

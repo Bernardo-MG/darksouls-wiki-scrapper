@@ -15,17 +15,7 @@ __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
 
-class Scrapper(ABC):
-    """
-    Scrapper interface.
-    """
-
-    @abstractmethod
-    def scrap(self):
-        raise NotImplementedError
-
-
-class CsvScrapper(Scrapper):
+class CsvScrapper(ABC):
     """
     Scraps a page, cleans up the data and stores it into a CSV file.
     """

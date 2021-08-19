@@ -58,10 +58,7 @@ class DialogueListScrapper(CsvScrapper):
         super(DialogueListScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Characters', 'output/dialogues.csv',
                                                ['person', 'condition', 'exchange'])
         self.root_url = root_url
-        self.list_scrapper = ListScrapper(root_url, DialogueScrapper(), lambda dom: self._extract_links(dom))
-
-    def _transform(self, dom):
-        return self.list_scrapper.scrap(dom)
+        self.inner_parser = ListScrapper(root_url, DialogueScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('li a.category-page__member-link')

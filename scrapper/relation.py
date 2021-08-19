@@ -64,7 +64,7 @@ class WeaponTypeRelScrapper(object):
     Weapon type relationships scrapper.
     """
 
-    def __init__(self, root):
+    def __init__(self):
         super(WeaponTypeRelScrapper, self).__init__()
 
     def scrap(self, sub_url):
@@ -93,10 +93,7 @@ class ArmorSetRelsScrapper(CsvScrapper):
         super(ArmorSetRelsScrapper, self).__init__(root_url + '/wiki/Armor_(Dark_Souls)',
                                                      'output/armors_armor_sets.csv',
                                                      ['armor', 'set'])
-        self.list_scrapper = ListScrapper(root_url, ArmorSetRelScrapper(), lambda dom: self._extract_links(dom))
-
-    def _transform(self, dom):
-        return self.list_scrapper.scrap(dom)
+        self.inner_parser = ListScrapper(root_url, ArmorSetRelScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('div[title="Sets"] li a')
@@ -111,7 +108,7 @@ class ShieldTypeRelsScrapper(CsvScrapper):
         super(ShieldTypeRelsScrapper, self).__init__(root_url + '/wiki/Shields',
                                                      'output/shields_shield_types.csv',
                                                      ['shield', 'type'])
-        self.list_scrapper = ListScrapper(root_url, ShieldTypeRelScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper(root_url, ShieldTypeRelScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')
@@ -126,7 +123,7 @@ class WeaponTypeRelsScrapper(CsvScrapper):
         super(WeaponTypeRelsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)',
                                                      'output/weapons_weapon_types.csv',
                                                      ['weapon', 'type'])
-        self.list_scrapper = ListScrapper(root_url, WeaponTypeRelScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper(root_url, WeaponTypeRelScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')

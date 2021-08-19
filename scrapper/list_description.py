@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from abc import abstractmethod
 import requests
 from bs4 import BeautifulSoup
 from scrapper.base import CsvScrapper, ListScrapper
@@ -17,8 +16,6 @@ class DescriptionScrapper(object):
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def scrap(self, url):
-        self.logger.info('Scrapping %s', url)
-
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
@@ -37,64 +34,40 @@ class DescriptionScrapper(object):
         return {'name': name, 'description': description}
 
 
-class BaseListDescriptionScrapper(CsvScrapper):
-    """
-    Scrapper for list pages. Will find all the subpages and scrap each of them.
-
-    This is ready for pages based on a name and description set.
-    """
-
-    def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url + list_page, output_file, ['name', 'description'])
-        self.list_scrapper = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
-
-    def _transform(self, dom):
-        return self.list_scrapper.scrap(dom)
-
-    @abstractmethod
-    def _extract_links(self, dom):
-        """
-        Extracts the links for the subpages from the DOM.
-
-        Returns
-        -------
-        list
-            a list of link elements
-        """
-        pass
-
-
-class AmmunitionScrapper(BaseListDescriptionScrapper):
+class AmmunitionScrapper(CsvScrapper):
     """
     Ammunition list scrapper.
     """
 
-    def __init__(self, root):
-        super(AmmunitionScrapper, self).__init__(root, '/wiki/Ammunition', 'output/ammunition.csv')
+    def __init__(self, root_url):
+        super(AmmunitionScrapper, self).__init__(root_url + '/wiki/Ammunition', 'output/ammunition.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('td:nth-of-type(1) a:has(> img)')
 
 
-class ArmorScrapper(BaseListDescriptionScrapper):
+class ArmorScrapper(CsvScrapper):
     """
     Armor list scrapper.
     """
 
-    def __init__(self, root):
-        super(ArmorScrapper, self).__init__(root, '/wiki/Armor_(Dark_Souls)', 'output/armors.csv')
+    def __init__(self, root_url):
+        super(ArmorScrapper, self).__init__(root_url + '/wiki/Armor_(Dark_Souls)', 'output/armors.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('table:not(:nth-of-type(1)) li a')
 
 
-class CatalystScrapper(BaseListDescriptionScrapper):
+class CatalystScrapper(CsvScrapper):
     """
     Catalyst list scrapper.
     """
 
-    def __init__(self, root):
-        super(CatalystScrapper, self).__init__(root, '/wiki/Catalysts', 'output/catalysts.csv')
+    def __init__(self, root_url):
+        super(CatalystScrapper, self).__init__(root_url + '/wiki/Catalysts', 'output/catalysts.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')
@@ -102,25 +75,27 @@ class CatalystScrapper(BaseListDescriptionScrapper):
         return filter(lambda item: not '(damage type)' in item['title'], result)
 
 
-class EmberScrapper(BaseListDescriptionScrapper):
+class EmberScrapper(CsvScrapper):
     """
     Ember list scrapper.
     """
 
-    def __init__(self, root):
-        super(EmberScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Embers', 'output/embers.csv')
+    def __init__(self, root_url):
+        super(EmberScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Embers', 'output/embers.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('li a.category-page__member-link')
 
 
-class KeyItemScrapper(BaseListDescriptionScrapper):
+class KeyItemScrapper(CsvScrapper):
     """
     Key item list scrapper.
     """
 
-    def __init__(self, root):
-        super(KeyItemScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Key_Items', 'output/key_items.csv')
+    def __init__(self, root_url):
+        super(KeyItemScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Key_Items', 'output/key_items.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
@@ -128,25 +103,27 @@ class KeyItemScrapper(BaseListDescriptionScrapper):
         return filter(lambda item: not 'Category:' in item['title'], result)
 
 
-class MiracleScrapper(BaseListDescriptionScrapper):
+class MiracleScrapper(CsvScrapper):
     """
     Miracle list scrapper.
     """
 
-    def __init__(self, root):
-        super(MiracleScrapper, self).__init__(root, '/wiki/Miracle_(Dark_Souls)', 'output/miracles.csv')
+    def __init__(self, root_url):
+        super(MiracleScrapper, self).__init__(root_url + '/wiki/Miracle_(Dark_Souls)', 'output/miracles.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('.article-table td:nth-of-type(1) a:has(> img)')
 
 
-class MiscellaneousItemScrapper(BaseListDescriptionScrapper):
+class MiscellaneousItemScrapper(CsvScrapper):
     """
     Key item list scrapper.
     """
 
-    def __init__(self, root):
-        super(MiscellaneousItemScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Miscellaneous_Items', 'output/misc_items.csv')
+    def __init__(self, root_url):
+        super(MiscellaneousItemScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Miscellaneous_Items', 'output/misc_items.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
@@ -154,61 +131,66 @@ class MiscellaneousItemScrapper(BaseListDescriptionScrapper):
         return filter(lambda item: not 'Category:' in item['title'], result)
 
 
-class PyromancyScrapper(BaseListDescriptionScrapper):
+class PyromancyScrapper(CsvScrapper):
     """
     Pyromancy list scrapper.
     """
 
-    def __init__(self, root):
-        super(PyromancyScrapper, self).__init__(root, '/wiki/Pyromancy_(Dark_Souls)', 'output/pyromancies.csv')
+    def __init__(self, root_url):
+        super(PyromancyScrapper, self).__init__(root_url + '/wiki/Pyromancy_(Dark_Souls)', 'output/pyromancies.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('.article-table td:nth-of-type(1) a:has(> img)')
 
 
-class RingScrapper(BaseListDescriptionScrapper):
+class RingScrapper(CsvScrapper):
     """
     Ring list scrapper.
     """
 
-    def __init__(self, root):
-        super(RingScrapper, self).__init__(root, '/wiki/Rings_(Dark_Souls)', 'output/rings.csv')
+    def __init__(self, root_url):
+        super(RingScrapper, self).__init__(root_url + '/wiki/Rings_(Dark_Souls)', 'output/rings.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('.article-table td:nth-of-type(1) a:has(> img)')
 
 
-class ShieldScrapper(BaseListDescriptionScrapper):
+class ShieldScrapper(CsvScrapper):
     """
     Armor list scrapper.
     """
 
-    def __init__(self, root):
-        super(ShieldScrapper, self).__init__(root, '/wiki/Shields', 'output/shields.csv')
+    def __init__(self, root_url):
+        super(ShieldScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shields.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')
 
 
-class SorceryScrapper(BaseListDescriptionScrapper):
+class SorceryScrapper(CsvScrapper):
     """
     Sorcery list scrapper.
     """
 
-    def __init__(self, root):
-        super(SorceryScrapper, self).__init__(root, '/wiki/Sorcery_(Dark_Souls)', 'output/sorceries.csv')
+    def __init__(self, root_url):
+        super(SorceryScrapper, self).__init__(root_url + '/wiki/Sorcery_(Dark_Souls)', 'output/sorceries.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('.article-table td:nth-of-type(1) a:has(> img)')
 
 
-class SoulScrapper(BaseListDescriptionScrapper):
+class SoulScrapper(CsvScrapper):
     """
     Soul list scrapper.
     """
 
-    def __init__(self, root):
-        super(SoulScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Souls', 'output/souls.csv')
+    def __init__(self, root_url):
+        super(SoulScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Souls', 'output/souls.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
@@ -216,13 +198,14 @@ class SoulScrapper(BaseListDescriptionScrapper):
         return filter(lambda item: not 'Category:' in item['title'], result)
 
 
-class TalismanScrapper(BaseListDescriptionScrapper):
+class TalismanScrapper(CsvScrapper):
     """
     Talisman list scrapper.
     """
 
-    def __init__(self, root):
-        super(TalismanScrapper, self).__init__(root, '/wiki/Talismans', 'output/talismans.csv')
+    def __init__(self, root_url):
+        super(TalismanScrapper, self).__init__(root_url + '/wiki/Talismans', 'output/talismans.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')
@@ -230,25 +213,27 @@ class TalismanScrapper(BaseListDescriptionScrapper):
         return filter(lambda item: not '(damage type)' in item['title'], result)
 
 
-class UpgradeMaterialScrapper(BaseListDescriptionScrapper):
+class UpgradeMaterialScrapper(CsvScrapper):
     """
     Upgrade material list scrapper.
     """
 
-    def __init__(self, root):
-        super(UpgradeMaterialScrapper, self).__init__(root, '/wiki/Upgrade_Materials', 'output/upgrade_materials.csv')
+    def __init__(self, root_url):
+        super(UpgradeMaterialScrapper, self).__init__(root_url + '/wiki/Upgrade_Materials', 'output/talismans.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('span.mw-headline a')
 
 
-class WeaponScrapper(BaseListDescriptionScrapper):
+class WeaponScrapper(CsvScrapper):
     """
     Weapon list scrapper.
     """
 
-    def __init__(self, root):
-        super(WeaponScrapper, self).__init__(root, '/wiki/Weapons_(Dark_Souls)', 'output/weapons.csv')
+    def __init__(self, root_url):
+        super(WeaponScrapper, self).__init__(root_url + '/wiki/Upgrade_Materials', 'output/talismans.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')

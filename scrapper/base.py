@@ -29,6 +29,15 @@ class CsvScrapper(ABC):
         self.exporter = CsvExporter(output_file, headers)
         # Data sorted by the first header
         self.cleaner = DataCleaner(headers[0])
+        self._inner_parser = None
+
+    @property
+    def inner_parser(self):
+        return self._inner_parser
+
+    @inner_parser.setter
+    def inner_parser(self, parser):
+        self._inner_parser = parser
 
     def scrap(self):
         self.logger.info('Scrapping %s', self.url)
@@ -39,7 +48,7 @@ class CsvScrapper(ABC):
 
         # Transforms DOM into the output data
         self.logger.debug('Transforming DOM')
-        data = self._transform(dom)
+        data = self.inner_parser.scrap(dom)
 
         # Cleans up data
         self.logger.debug('Final data clean up')
@@ -50,18 +59,6 @@ class CsvScrapper(ABC):
         self.exporter.export(data)
 
         self.logger.info('Finished scrapping %s', self.url)
-
-    @abstractmethod
-    def _transform(self, dom):
-        """
-        Extracts the data from the DOM.
-
-        Returns
-        -------
-        data
-            list of data parsed from the DOM
-        """
-        pass
 
 
 class ListScrapper(object):

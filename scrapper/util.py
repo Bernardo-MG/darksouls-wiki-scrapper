@@ -36,13 +36,15 @@ class DataCleaner:
     """
 
     def __init__(self, key):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.key = key
 
     def clean_up(self, data):
         # Sorts data by defined key
+        self.logger.trace('Sorting by column %s', self.key)
         data = sorted(data, key=lambda d: d[self.key])
 
-        # Removes data in parenthesis from name
+        # Cleans up data
         for item in data:
             for key in item:
                 value = item[key]

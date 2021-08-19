@@ -35,12 +35,15 @@ class CsvScrapper(ABC):
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Transforms DOM into the output data
+        self.logger.trace('Transforming DOM')
         data = self._transform(dom)
 
         # Cleans up data
+        self.logger.trace('Final data clean up')
         self.cleaner.clean_up(data)
 
         # Exports data
+        self.logger.trace('Exporting data')
         self.exporter.export(data)
 
         self.logger.info('Finished scrapping %s', self.url)

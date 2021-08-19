@@ -85,7 +85,7 @@ class ArmorScrapper(BaseListDescriptionScrapper):
         super(ArmorScrapper, self).__init__(root, '/wiki/Armor_(Dark_Souls)', 'output/armors.csv')
 
     def _extract_links(self, dom):
-        return dom.select('div[title="Pieces"] li a')
+        return dom.select('table:not(:nth-of-type(1)) li a')
 
 
 class CatalystScrapper(BaseListDescriptionScrapper):

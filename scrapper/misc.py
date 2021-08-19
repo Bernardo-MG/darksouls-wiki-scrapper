@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.base import BaseListScrapper
+from scrapper.base import ListScrapper, CsvScrapper
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -13,16 +13,15 @@ __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
 
-class DialogueScrapper(BaseListScrapper):
+class DialogueScrapper(object):
     """
-    Armor set scrapper.
+    Dialogue scrapper.
     """
 
-    def __init__(self, root):
-        super(DialogueScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Characters', 'output/dialogues.csv',
-                                               ['person', 'condition', 'exchange'])
+    def __init__(self):
+        super(DialogueScrapper, self).__init__()
 
-    def scrap_inner_page(self, sub_url):
+    def scrap(self, sub_url):
         html = requests.get(sub_url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
@@ -48,6 +47,21 @@ class DialogueScrapper(BaseListScrapper):
                                  'exchange': exchange})
 
         return dialogue
+
+
+class DialogueListScrapper(CsvScrapper):
+    """
+    Armor set scrapper.
+    """
+
+    def __init__(self, root_url):
+        super(DialogueListScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Characters', 'output/dialogues.csv',
+                                               ['person', 'condition', 'exchange'])
+        self.root_url = root_url
+        self.list_scrapper = ListScrapper(root_url, DialogueScrapper(), lambda dom: self._extract_links(dom))
+
+    def _transform(self, dom):
+        return self.list_scrapper.scrap(dom)
 
     def _extract_links(self, dom):
         return dom.select('li a.category-page__member-link')

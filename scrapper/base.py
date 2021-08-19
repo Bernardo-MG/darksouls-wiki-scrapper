@@ -64,7 +64,7 @@ class CsvScrapper(ABC):
         pass
 
 
-class ListScrapper(ABC):
+class ListScrapper(object):
     """
     Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
     """
@@ -98,29 +98,3 @@ class ListScrapper(ABC):
                 data.append(scrapped)
 
         return data
-
-
-class BaseListScrapper(CsvScrapper):
-    """
-    Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
-    """
-
-    def __init__(self, root_url, list_page, output_file, headers, inner_page_scrapper):
-        super(BaseListScrapper, self).__init__(root_url + list_page, output_file, headers)
-        self.root_url = root_url
-        self.list_scrapper = ListScrapper(root_url, inner_page_scrapper, lambda dom: self._extract_links(dom))
-
-    def _transform(self, dom):
-        return self.list_scrapper.scrap(dom)
-
-    @abstractmethod
-    def _extract_links(self, dom):
-        """
-        Extracts the links for the subpages from the DOM.
-
-        Returns
-        -------
-        list
-            a list of link elements
-        """
-        pass

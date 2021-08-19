@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import requests
 from bs4 import BeautifulSoup
-from scrapper.base import BaseListScrapper
+from scrapper.base import CsvScrapper, ListScrapper
 import logging
 
 
-class DescriptionScrapper(ABC):
+class DescriptionScrapper(object):
     """
     Scrapper for pages with description.
     """
@@ -37,7 +37,7 @@ class DescriptionScrapper(ABC):
         return {'name': name, 'description': description}
 
 
-class BaseListDescriptionScrapper(BaseListScrapper):
+class BaseListDescriptionScrapper(CsvScrapper):
     """
     Scrapper for list pages. Will find all the subpages and scrap each of them.
 
@@ -45,8 +45,11 @@ class BaseListDescriptionScrapper(BaseListScrapper):
     """
 
     def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'description'],
-                                                          DescriptionScrapper())
+        super(BaseListDescriptionScrapper, self).__init__(root_url + list_page, output_file, ['name', 'description'])
+        self.list_scrapper = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
+
+    def _transform(self, dom):
+        return self.list_scrapper.scrap(dom)
 
     @abstractmethod
     def _extract_links(self, dom):

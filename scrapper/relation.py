@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.base import BaseListScrapper, BaseNameListScrapper
+from scrapper.base import BaseListScrapper
 import requests
 from bs4 import BeautifulSoup
 
@@ -10,42 +10,6 @@ Relationships scrappers
 
 __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
-
-
-class ArmorSetScrapper(BaseNameListScrapper):
-    """
-    Armor set scrapper.
-    """
-
-    def __init__(self, root):
-        super(ArmorSetScrapper, self).__init__(root, '/wiki/Armor_(Dark_Souls)', 'output/armor_sets.csv')
-
-    def extract_list(self, dom):
-        return dom.select('div[title="Sets"] li a')
-
-
-class ShieldTypeScrapper(BaseNameListScrapper):
-    """
-    Shield type scrapper.
-    """
-
-    def __init__(self, root):
-        super(ShieldTypeScrapper, self).__init__(root, '/wiki/Shields', 'output/shield_types.csv')
-
-    def extract_list(self, dom):
-        return dom.select('dt a')
-
-
-class WeaponTypeScrapper(BaseNameListScrapper):
-    """
-    Weapon type scrapper.
-    """
-
-    def __init__(self, root):
-        super(WeaponTypeScrapper, self).__init__(root, '/wiki/Weapon_Types_(Dark_Souls)', 'output/weapon_types.csv')
-
-    def extract_list(self, dom):
-        return dom.select('dt a')
 
 
 class ArmorSetRelsScrapper(BaseListScrapper):
@@ -136,15 +100,3 @@ class WeaponTypeRelsScrapper(BaseListScrapper):
         main_list = main_list + dom.select('h2:has(> span#Weapons) + table + table li a')
 
         return main_list
-
-
-class UniqueWeaponScrapper(BaseNameListScrapper):
-    """
-    Unique weapon scrapper.
-    """
-
-    def __init__(self, root):
-        super(UniqueWeaponScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Unique_Weapons', 'output/unique_weapons.csv')
-
-    def extract_list(self, dom):
-        return dom.select('ul.category-page__members-for-char li a.category-page__member-link')

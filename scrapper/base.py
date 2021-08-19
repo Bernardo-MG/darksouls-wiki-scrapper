@@ -64,18 +64,20 @@ class CsvScrapper(ABC):
         pass
 
 
-class BaseListScrapper(CsvScrapper):
+class ListScrapper(ABC):
     """
     Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
     """
 
-    def __init__(self, root_url, list_page, output_file, headers, inner_page_scrapper):
-        super(BaseListScrapper, self).__init__(root_url + list_page, output_file, headers)
+    def __init__(self, root_url, inner_page_scrapper, link_scrapper):
+        super(ListScrapper, self).__init__()
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.root_url = root_url
         self.inner_page_scrapper = inner_page_scrapper
+        self.link_scrapper = link_scrapper
 
-    def _transform(self, dom):
-        main_list = self._extract_links(dom)
+    def scrap(self, dom):
+        main_list = self.link_scrapper(dom)
 
         # Takes the relative path and appends it to the root URL
         sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
@@ -96,6 +98,20 @@ class BaseListScrapper(CsvScrapper):
                 data.append(scrapped)
 
         return data
+
+
+class BaseListScrapper(CsvScrapper):
+    """
+    Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
+    """
+
+    def __init__(self, root_url, list_page, output_file, headers, inner_page_scrapper):
+        super(BaseListScrapper, self).__init__(root_url + list_page, output_file, headers)
+        self.root_url = root_url
+        self.list_scrapper = ListScrapper(root_url, inner_page_scrapper, lambda dom: self._extract_links(dom))
+
+    def _transform(self, dom):
+        return self.list_scrapper.scrap(dom)
 
     @abstractmethod
     def _extract_links(self, dom):

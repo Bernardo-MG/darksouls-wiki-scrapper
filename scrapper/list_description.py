@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import requests
 from bs4 import BeautifulSoup
 from scrapper.base import BaseListScrapper
+import logging
 
 
 class DescriptionScrapper(ABC):
@@ -13,9 +14,11 @@ class DescriptionScrapper(ABC):
 
     def __init__(self):
         super(DescriptionScrapper, self).__init__()
+        self.logger = logging.getLogger(self.__class__.__name__)
 
-    @staticmethod
-    def scrap(url):
+    def scrap(self, url):
+        self.logger.info('Scrapping %s', url)
+
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 

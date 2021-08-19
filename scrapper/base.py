@@ -18,6 +18,9 @@ __license__ = 'MIT'
 class CsvScrapper(ABC):
     """
     Scraps a page, cleans up the data and stores it into a CSV file.
+
+    This will only parse the DOM from a single page. Any additional operation, such as the actual scrapping, is delegated
+    to the _transform method.
     """
 
     def __init__(self, url, output_file, headers):
@@ -35,15 +38,15 @@ class CsvScrapper(ABC):
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Transforms DOM into the output data
-        self.logger.trace('Transforming DOM')
+        self.logger.debug('Transforming DOM')
         data = self._transform(dom)
 
         # Cleans up data
-        self.logger.trace('Final data clean up')
+        self.logger.debug('Final data clean up')
         self.cleaner.clean_up(data)
 
         # Exports data
-        self.logger.trace('Exporting data')
+        self.logger.debug('Exporting data')
         self.exporter.export(data)
 
         self.logger.info('Finished scrapping %s', self.url)

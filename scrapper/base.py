@@ -112,34 +112,6 @@ class BaseListScrapper(CsvScrapper):
         pass
 
 
-class DescriptionScrapper(ABC):
-    """
-    Scrapper for pages with description.
-    """
-
-    def __init__(self):
-        super(DescriptionScrapper, self).__init__()
-
-    @staticmethod
-    def scrap(url):
-        html = requests.get(url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Description
-        description = dom.select('div.mainbg dd i')
-        info = []
-        for item in description:
-            if item.contents:
-                info.append(item.get_text())
-
-        description = '\\n'.join(info)
-
-        return {'name': name, 'url': url, 'description': description}
-
-
 class BaseNameListScrapper(CsvScrapper):
     """
     Scrapper for name list pages. Will find all the names in a page and store them in a list.

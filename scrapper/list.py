@@ -18,7 +18,7 @@ class EnemyScrapper(BaseListScrapper):
     """
 
     def __init__(self, root):
-        super(EnemyScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Enemies', 'output/enemies.csv', ['name', 'url'])
+        super(EnemyScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Enemies', 'output/enemies.csv', ['name'])
 
     def extract_list_links(self, dom):
         result = dom.select('li a.category-page__member-link')
@@ -32,4 +32,4 @@ class EnemyScrapper(BaseListScrapper):
         # Name
         name = dom.select('h1#firstHeading')[0].get_text()
 
-        return {'name': name, 'url': sub_url}
+        return {'name': name}

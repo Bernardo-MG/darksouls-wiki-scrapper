@@ -31,7 +31,7 @@ class DescriptionScrapper(ABC):
 
         description = '\\n'.join(info)
 
-        return {'name': name, 'url': url, 'description': description}
+        return {'name': name, 'description': description}
 
 
 class BaseListDescriptionScrapper(BaseListScrapper):
@@ -42,7 +42,7 @@ class BaseListDescriptionScrapper(BaseListScrapper):
     """
 
     def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'],
+        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'description'],
                                                           DescriptionScrapper())
 
     @abstractmethod

@@ -85,3 +85,18 @@ class EnemyScrapper(CsvScrapper):
         result = dom.select('li a.category-page__member-link')
 
         return filter(lambda item: not 'Thread:' in item['title'], result)
+
+
+class MerchantScrapper(CsvScrapper):
+    """
+    Enemy list scrapper.
+    """
+
+    def __init__(self, root_url):
+        super(MerchantScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Merchants', 'output/merchants.csv', ['name'])
+        self.inner_parser = NameListScrapper(self._extract_links)
+
+    def _extract_links(self, dom):
+        result = dom.select('li a.category-page__member-link')
+
+        return filter(lambda item: not 'Thread:' in item['title'], result)

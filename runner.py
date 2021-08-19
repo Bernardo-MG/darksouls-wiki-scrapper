@@ -53,5 +53,5 @@ scrappers.append(WeaponScrapper(url_root))
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = ArmorSetScrapper(url_root)
+parser = MerchantScrapper(url_root)
 parser.scrap()

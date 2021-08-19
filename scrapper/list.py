@@ -11,6 +11,7 @@ Listing scrappers
 __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
+
 class EnemyScrapper(BaseListScrapper):
     """
     Weapon list scrapper.

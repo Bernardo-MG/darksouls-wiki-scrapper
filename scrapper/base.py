@@ -66,7 +66,7 @@ class CsvScrapper(Scrapper):
         pass
 
 
-class BaseListScrapper(BaseScrapper):
+class BaseListScrapper(CsvScrapper):
     """
     Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
     """
@@ -139,7 +139,8 @@ class DescriptionScrapper(ABC):
 
         return {'name': name, 'url': url, 'description': description}
 
-class BaseNameListScrapper(BaseScrapper):
+
+class BaseNameListScrapper(CsvScrapper):
     """
     Scrapper for name list pages. Will find all the names in a page and store them in a list.
     """

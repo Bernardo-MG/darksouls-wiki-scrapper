@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
 from scrapper.base import BaseListScrapper, BaseNameListScrapper
 import requests
 from bs4 import BeautifulSoup

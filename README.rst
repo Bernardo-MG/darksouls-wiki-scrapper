@@ -2,7 +2,9 @@
 Dark Souls Wiki Scrapper
 ===============================
 
-A scrapper to gather data from the Dark Souls wiki.
+A collection of scrappers to gather data from the Dark Souls wiki.
+
+As these scrappers use CSS selectors tailored to each page, changes on those pages may break the parsers.
 
 .. image:: https://img.shields.io/badge/docs-release-blue.svg
     :target: http://docs.bernardomg.com/darksouls-wiki-scrapper
@@ -40,18 +42,12 @@ These can be installed with:
 
 ``pip install --upgrade -r requirements.txt``
 
-Installing
-~~~~~~~~~~
-
-If needed, manual installation is possible:
-
-``python setup.py install``
-
 Usage
 -----
 
-The application has been coded in Python, and does not require any particular
-framework.
+The runner file takes care of executing the scrappers:
+
+``python runner.py``
 
 Testing
 -------

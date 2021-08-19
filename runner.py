@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.list import *
+from scrapper.list_description import *
+from scrapper.name_list import *
 from scrapper.relation import *
 from scrapper.misc import *
 import logging
@@ -13,6 +14,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format = '%(asctime)s - %(name)s - %(levelname)s: %(message)s',
 )
+logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
 
 # for handler in logging.root.handlers:
 #     handler.addFilter(logging.Filter(['base', 'list', 'relation']))
@@ -51,5 +53,5 @@ scrappers.append(WeaponScrapper(url_root))
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = UniqueWeaponScrapper(url_root)
+parser = ArmorSetScrapper(url_root)
 parser.scrap()

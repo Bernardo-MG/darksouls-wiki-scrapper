@@ -2,10 +2,9 @@
 
 import requests
 from bs4 import BeautifulSoup
-import csv
 import logging
-from abc import ABC, abstractmethod
-import re
+
+from scrapper.util import CsvExporter, DataCleaner
 
 """
 Base scrappers
@@ -15,197 +14,83 @@ __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
 
-class CsvExport:
-
-    def __init__(self, output_file, headers):
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.output_file = output_file
-        self.headers = headers
-
-    def export(self, data):
-        with open(self.output_file, mode='w', newline='') as data_file:
-            fieldnames = self.headers
-            output_writer = csv.DictWriter(data_file, fieldnames=fieldnames)
-
-            output_writer.writeheader()
-            output_writer.writerows(data)
-
-        self.logger.info('Saved {} rows to {}'.format(len(data), self.output_file))
-
-
-class DataCleaner:
-
-    def __init__(self, key):
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.key = key
-
-    def clean_up(self, data):
-        # Sorts data by name
-        data = sorted(data, key=lambda d: d[self.key])
-
-        # Removes data in parenthesis from name
-        for item in data:
-            item[self.key] = re.sub(" \(.*\)", "", item[self.key])
-
-
-class BaseScrapper(ABC):
+class CsvScrapper(object):
     """
-    Generic scrapper.
+    Scraps a page, cleans up the data and stores it into a CSV file.
+
+    This will only parse the DOM from a single page. Any additional operation, such as the actual scrapping, is delegated
+    to the _transform method.
     """
 
     def __init__(self, url, output_file, headers):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.url = url
-        self.exporter = CsvExport(output_file, headers)
+        self.exporter = CsvExporter(output_file, headers)
+        # Data sorted by the first header
         self.cleaner = DataCleaner(headers[0])
+        self._inner_parser = None
+
+    @property
+    def inner_parser(self):
+        return self._inner_parser
+
+    @inner_parser.setter
+    def inner_parser(self, parser):
+        self._inner_parser = parser
 
     def scrap(self):
-        list_url = self.url
+        self.logger.info('Scrapping %s', self.url)
 
-        self.logger.info('Scrapping {}'.format(list_url))
-
-        html = requests.get(list_url)
+        # Parses the DOM from the HTML page
+        html = requests.get(self.url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
-        data = self.scrap_data(dom)
+        # Transforms DOM into the output data
+        self.logger.debug('Transforming DOM')
+        data = self.inner_parser.scrap(dom)
 
         # Cleans up data
+        self.logger.debug('Final data clean up')
         self.cleaner.clean_up(data)
 
         # Exports data
+        self.logger.debug('Exporting data')
         self.exporter.export(data)
 
-        self.logger.info('Finished scrapping {}'.format(list_url))
-
-    @abstractmethod
-    def scrap_data(self, dom):
-        """
-        Extracts the data from the DOM.
-
-        Returns
-        -------
-        data
-            list of data parsed from the DOM
-        """
-        pass
+        self.logger.info('Finished scrapping %s', self.url)
 
 
-class BaseListScrapper(BaseScrapper):
+class ListScrapper(object):
     """
-    Scrapper for list pages. Will find all the subpages and scrap each of them.
+    Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
     """
 
-    def __init__(self, root_url, list_page, output_file, headers):
-        super(BaseListScrapper, self).__init__(root_url + list_page, output_file, headers)
+    def __init__(self, root_url, inner_page_scrapper, link_scrapper):
+        super(ListScrapper, self).__init__()
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.root_url = root_url
+        self.inner_page_scrapper = inner_page_scrapper
+        self.link_scrapper = link_scrapper
 
-    def scrap_data(self, dom):
-        main_list = self.extract_list_links(dom)
+    def scrap(self, dom):
+        main_list = self.link_scrapper(dom)
 
+        # Takes the relative path and appends it to the root URL
         sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
 
-        self.logger.info('Found {} inner pages to scrap'.format(len(sub_urls)))
+        self.logger.info('Found %d inner pages to scrap', len(sub_urls))
+        self.logger.debug('Inner pages: %s', len(sub_urls))
 
         # Scraps inner pages
         data = []
         for index, sub_url in enumerate(sub_urls):
             if index % 10 == 0:
-                self.logger.info('Scrapping URL {} of {}'.format(index, len(sub_urls)))
-            scrapped = self.scrap_inner_page(sub_url)
-            if isinstance(data, list):
+                self.logger.info('Scrapping URL %d of %d', index, len(sub_urls))
+            self.logger.debug('Scrapping inner page: %s', sub_url)
+            scrapped = self.inner_page_scrapper.scrap(sub_url)
+            if isinstance(scrapped, list):
                 data = data + scrapped
             else:
                 data.append(scrapped)
 
         return data
-
-    @abstractmethod
-    def scrap_inner_page(self, sub_url):
-        """
-        Parses an inner page.
-
-        Returns
-        -------
-        data
-            list of data parsed from the page
-        """
-        pass
-
-    @abstractmethod
-    def extract_list_links(self, dom):
-        """
-        Extracts the links for the subpages from the DOM.
-
-        Returns
-        -------
-        list
-            a list of link elements
-        """
-        pass
-
-
-class BaseListDescriptionScrapper(BaseListScrapper):
-    """
-    Scrapper for list pages. Will find all the subpages and scrap each of them.
-
-    This is ready for pages based on a name and description set.
-    """
-
-    def __init__(self, root_url, list_page, output_file):
-        super(BaseListDescriptionScrapper, self).__init__(root_url, list_page, output_file, ['name', 'url', 'description'])
-
-    def scrap_inner_page(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Description
-        description = dom.select('div.mainbg dd i')
-        info = []
-        for item in description:
-            if item.contents:
-                info.append(item.get_text())
-
-        description = '\\n'.join(info)
-
-        return {'name': name, 'url': sub_url, 'description': description}
-
-    @abstractmethod
-    def extract_list_links(self, dom):
-        """
-        Extracts the links for the subpages from the DOM.
-
-        Returns
-        -------
-        list
-            a list of link elements
-        """
-        pass
-
-
-class BaseNameListScrapper(BaseScrapper):
-    """
-    Scrapper for name list pages. Will find all the names in a page and store them in a list.
-    """
-
-    def __init__(self, root_url, list_page, output_file):
-        super(BaseNameListScrapper, self).__init__(root_url + list_page, output_file, ['name'])
-
-    def scrap_data(self, dom):
-        main_list = self.extract_list(dom)
-
-        return list(map(lambda item: {'name': item.get_text()}, main_list))
-
-    @abstractmethod
-    def extract_list(self, dom):
-        """
-        Extracts the list of names from the DOM.
-
-        Returns
-        -------
-        list
-            a list of text elements
-        """
-        pass

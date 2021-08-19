@@ -3,7 +3,6 @@
 import requests
 from bs4 import BeautifulSoup
 import logging
-from abc import ABC, abstractmethod
 
 from scrapper.util import CsvExporter, DataCleaner
 
@@ -15,7 +14,7 @@ __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
 
 
-class CsvScrapper(ABC):
+class CsvScrapper(object):
     """
     Scraps a page, cleans up the data and stores it into a CSV file.
 

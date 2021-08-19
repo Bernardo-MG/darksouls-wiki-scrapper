@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from scrapper.list_description import *
-from scrapper.list import *
+from scrapper.name_list import *
 from scrapper.relation import *
 from scrapper.misc import *
 import logging
@@ -52,5 +52,5 @@ scrappers.append(WeaponScrapper(url_root))
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = AmmunitionScrapper(url_root)
+parser = EnemyScrapper(url_root)
 parser.scrap()

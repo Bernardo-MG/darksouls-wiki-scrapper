@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from scrapper.base import CsvScrapper
 
@@ -77,3 +77,17 @@ class UniqueWeaponScrapper(BaseNameListScrapper):
 
     def extract_list(self, dom):
         return dom.select('ul.category-page__members-for-char li a.category-page__member-link')
+
+
+class EnemyScrapper(BaseNameListScrapper):
+    """
+    Enemy list scrapper.
+    """
+
+    def __init__(self, root):
+        super(EnemyScrapper, self).__init__(root, '/wiki/Category:Dark_Souls:_Enemies', 'output/enemies.csv')
+
+    def extract_list(self, dom):
+        result = dom.select('li a.category-page__member-link')
+
+        return filter(lambda item: not 'Thread:' in item['title'], result)

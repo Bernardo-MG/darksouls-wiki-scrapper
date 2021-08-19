@@ -14,6 +14,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format = '%(asctime)s - %(name)s - %(levelname)s: %(message)s',
 )
+logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
 
 # for handler in logging.root.handlers:
 #     handler.addFilter(logging.Filter(['base', 'list', 'relation']))

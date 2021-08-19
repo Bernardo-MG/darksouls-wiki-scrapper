@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import csv
-import re
 import logging
 
 """

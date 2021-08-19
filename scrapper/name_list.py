@@ -51,7 +51,7 @@ class ArmorSetScrapper(BaseNameListScrapper):
         super(ArmorSetScrapper, self).__init__(root, '/wiki/Armor_(Dark_Souls)', 'output/armor_sets.csv')
 
     def _extract_links(self, dom):
-        return dom.select('div[title="Sets"] li a')
+        return dom.select('table:nth-of-type(1) li a')
 
 
 class ShieldTypeScrapper(BaseNameListScrapper):

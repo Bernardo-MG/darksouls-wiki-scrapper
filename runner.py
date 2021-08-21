@@ -53,5 +53,5 @@ scrappers.append(WeaponScrapper(url_root))
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = CharacterLocationScrapper(url_root)
+parser = PhantomScrapper(url_root)
 parser.scrap()

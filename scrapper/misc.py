@@ -88,7 +88,7 @@ class LocationScrapper(object):
         name = dom.select('h1#firstHeading')[0].get_text()
 
         # Locations
-        locations = dom.select('h2 + p > a[title]')
+        locations = dom.select('h2:nth-of-type(1) + p > a[title]')
 
         return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
 

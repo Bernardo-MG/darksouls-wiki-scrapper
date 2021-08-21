@@ -72,7 +72,7 @@ class CatalystScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')
 
-        return filter(lambda item: not '(damage type)' in item['title'], result)
+        return list(filter(lambda item: not '(damage type)' in item['title'], result))
 
 
 class EmberScrapper(CsvScrapper):
@@ -100,7 +100,7 @@ class KeyItemScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Category:' in item['title'], result)
+        return list(filter(lambda item: not 'Category:' in item['title'], result))
 
 
 class MiracleScrapper(CsvScrapper):
@@ -128,7 +128,7 @@ class MiscellaneousItemScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Category:' in item['title'], result)
+        return list(filter(lambda item: not 'Category:' in item['title'], result))
 
 
 class PyromancyScrapper(CsvScrapper):
@@ -195,7 +195,7 @@ class SoulScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Category:' in item['title'], result)
+        return list(filter(lambda item: not 'Category:' in item['title'], result))
 
 
 class TalismanScrapper(CsvScrapper):
@@ -210,7 +210,7 @@ class TalismanScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')
 
-        return filter(lambda item: not '(damage type)' in item['title'], result)
+        return list(filter(lambda item: not '(damage type)' in item['title'], result))
 
 
 class UpgradeMaterialScrapper(CsvScrapper):

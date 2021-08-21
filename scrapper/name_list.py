@@ -84,7 +84,7 @@ class EnemyScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Thread:' in item['title'], result)
+        return list(filter(lambda item: not 'Thread:' in item['title'], result))
 
 
 class MerchantScrapper(CsvScrapper):
@@ -99,7 +99,7 @@ class MerchantScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Thread:' in item['title'], result)
+        return list(filter(lambda item: not 'Thread:' in item['title'], result))
 
 
 class BlacksmithScrapper(CsvScrapper):
@@ -114,4 +114,4 @@ class BlacksmithScrapper(CsvScrapper):
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')
 
-        return filter(lambda item: not 'Thread:' in item['title'], result)
+        return list(filter(lambda item: not 'Thread:' in item['title'], result))

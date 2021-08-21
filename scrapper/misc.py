@@ -115,6 +115,27 @@ class LocationScrapper(object):
         return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
 
 
+class AdjacentLocationScrapper(object):
+    """
+    Dialogue scrapper.
+    """
+
+    def __init__(self):
+        super(AdjacentLocationScrapper, self).__init__()
+
+    def scrap(self, sub_url):
+        html = requests.get(sub_url)
+        dom = BeautifulSoup(html.text, 'html.parser')
+
+        # Name
+        name = dom.select('h1#firstHeading')[0].get_text()
+
+        # Locations
+        locations = dom.select('h2:has(> span#Adjacent_locations) + ul a[title]')
+
+        return list(map(lambda location: {'location': name, 'adjacent': location['title']}, locations))
+
+
 class DialogueListScrapper(CsvScrapper):
     """
     Armor set scrapper.
@@ -174,6 +195,23 @@ class EnemyDropScrapper(CsvScrapper):
                                                ['actor', 'location'])
         self.root_url = root_url
         self.inner_parser = ListScrapper(root_url, AsideDropScrapper(), lambda dom: self._extract_links(dom))
+
+    def _extract_links(self, dom):
+        result = dom.select('li a.category-page__member-link')
+
+        return list(filter(lambda item: not 'Thread:' in item['title'], result))
+
+
+class AdjacentLocationsScrapper(CsvScrapper):
+    """
+    Armor set scrapper.
+    """
+
+    def __init__(self, root_url):
+        super(AdjacentLocationsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Locations', 'output/adjacent_locations.csv',
+                                               ['location', 'adjacent'])
+        self.root_url = root_url
+        self.inner_parser = ListScrapper(root_url, AdjacentLocationScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

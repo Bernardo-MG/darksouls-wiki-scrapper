@@ -10,7 +10,7 @@ class WeaponTypeListScrapper(CsvScrapper):
     """
 
     def __init__(self, root_url):
-        super(WeaponTypeListScrapper, self).__init__(root_url + '/wiki/Weapon_Types_(Dark_Souls)', 'output/weapons.csv', ['name'])
+        super(WeaponTypeListScrapper, self).__init__(root_url + '/wiki/Weapon_Types_(Dark_Souls)', 'output/weapon_types.csv', ['name'])
         self.inner_parser = NameListScrapper(self._extract_links)
 
     def _extract_links(self, dom):

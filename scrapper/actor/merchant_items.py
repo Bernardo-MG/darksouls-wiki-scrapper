@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.base import ListScrapper, CsvScrapper
 import requests
 from bs4 import BeautifulSoup
 import logging
 
-"""
-Relationships scrappers
-"""
-
-__author__ = 'Bernardo Martínez Garrido'
-__license__ = 'MIT'
+from scrapper.base import CsvScrapper, ListScrapper
 
 
-class MerchantItemsRelScrapper(object):
+class MerchantItemScrapper(object):
     """
     Armor set relationships scrapper.
     """
 
     def __init__(self):
-        super(MerchantItemsRelScrapper, self).__init__()
+        super(MerchantItemScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def scrap(self, sub_url):
@@ -41,16 +35,16 @@ class MerchantItemsRelScrapper(object):
         return data
 
 
-class MerchantItemsRelsScrapper(CsvScrapper):
+class MerchantItemsScrapper(CsvScrapper):
     """
     Weapon type relationships scrapper.
     """
 
     def __init__(self, root_url):
-        super(MerchantItemsRelsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Merchants',
+        super(MerchantItemsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Merchants',
                                                      'output/merchant_items.csv',
                                                      ['merchant', 'item'])
-        self.inner_parser = ListScrapper(root_url, MerchantItemsRelScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper(root_url, MerchantItemScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.list_description import *
-from scrapper.name_list import *
-from scrapper.relation import *
-from scrapper.misc import *
 import logging
 import configparser
 import os
+
+from scrapper.item import WeaponScrapper
 
 logging.basicConfig(
     filename='scrapper.log',
@@ -31,27 +29,11 @@ if not os.path.exists('output'):
 
 scrappers = []
 
-scrappers.append(AmmunitionScrapper(url_root))
-scrappers.append(ArmorScrapper(url_root))
-scrappers.append(CatalystScrapper(url_root))
-scrappers.append(EmberScrapper(url_root))
-scrappers.append(KeyItemScrapper(url_root))
-scrappers.append(MiracleScrapper(url_root))
-scrappers.append(MiscellaneousItemScrapper(url_root))
-scrappers.append(PyromancyScrapper(url_root))
-scrappers.append(RingScrapper(url_root))
-scrappers.append(ShieldScrapper(url_root))
-scrappers.append(SorceryScrapper(url_root))
-scrappers.append(SoulScrapper(url_root))
-scrappers.append(TalismanScrapper(url_root))
-scrappers.append(UpgradeMaterialScrapper(url_root))
-scrappers.append(WeaponScrapper(url_root))
-
 # for scrapper in scrappers:
 #     scrapper.scrap()
 
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = AdjacentLocationsScrapper(url_root)
+parser = WeaponScrapper(url_root)
 parser.scrap()

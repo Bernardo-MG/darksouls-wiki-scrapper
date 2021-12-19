@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from scrapper.base import ListScrapper, CsvScrapper
-import requests
-from bs4 import BeautifulSoup
-import re
-import logging
+from scrapper.modules import DialogueScrapper, AsideLocationScrapper, LocationScrapper, AsideDropScrapper, \
+    AdjacentLocationScrapper
 
 """
 Relationships scrappers
@@ -12,128 +10,6 @@ Relationships scrappers
 
 __author__ = 'Bernardo Martínez Garrido'
 __license__ = 'MIT'
-
-
-class DialogueScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(DialogueScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Dialogue
-        exchanges = dom.select('h2:has(span[id="Dialogue"]) + table tr')
-
-        dialogue = []
-        for exchange in exchanges:
-            data = exchange.select('td')
-            if len(data) == 2:
-
-                condition = data[0].get_text()
-                condition = re.sub(r'\n', '', condition)
-
-                exchange = data[1].get_text()
-                exchange = re.sub(r'\n', '', exchange)
-
-                dialogue.append({'person': name,
-                                 'condition': condition,
-                                 'exchange': exchange})
-
-        return dialogue
-
-
-class AsideDropScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(AsideDropScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        drops = dom.select('aside[role="region"] div[data-source="drops"] a')
-        drops = list(filter(lambda item: not 'None' == item['title'], drops))
-
-        return list(map(lambda location: {'actor': name, 'location': location['title']}, drops))
-
-
-class AsideLocationScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(AsideLocationScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        locations = dom.select('aside[role="region"] div[data-source="location"] a')
-
-        return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
-
-
-class LocationScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(LocationScrapper, self).__init__()
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        locations = dom.select('h2:nth-of-type(1) + p > a[title]')
-
-        return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
-
-
-class AdjacentLocationScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(AdjacentLocationScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        locations = dom.select('h2:has(> span#Adjacent_locations) + ul a[title]')
-
-        return list(map(lambda location: {'location': name, 'adjacent': location['title']}, locations))
 
 
 class DialogueListScrapper(CsvScrapper):

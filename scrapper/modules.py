@@ -34,6 +34,8 @@ class DescriptionScrapper(object):
 
         description = '\\n'.join(info)
 
+        return {'name': name, 'description': description}
+
 
 class NameListScrapper(object):
     """
@@ -48,4 +50,3 @@ class NameListScrapper(object):
         main_list = self._extract_links(dom)
 
         return list(map(lambda item: {'name': item.get_text()}, main_list))
-

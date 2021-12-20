@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from scrapper.base import ListScrapper, CsvScrapper
+from scrapper.base import CsvScrapper, ListScrapper
 import requests
 from bs4 import BeautifulSoup
-import re
-
-"""
-Relationships scrappers
-"""
-
-__author__ = 'Bernardo Martínez Garrido'
-__license__ = 'MIT'
 
 
 class DialogueScrapper(object):

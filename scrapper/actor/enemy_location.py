@@ -1,7 +1,29 @@
 # -*- coding: utf-8 -*-
 
 from scrapper.base import CsvScrapper, ListScrapper
-from scrapper.modules import AsideLocationScrapper
+import requests
+from bs4 import BeautifulSoup
+
+
+class AsideLocationScrapper(object):
+    """
+    Dialogue scrapper.
+    """
+
+    def __init__(self):
+        super(AsideLocationScrapper, self).__init__()
+
+    def scrap(self, sub_url):
+        html = requests.get(sub_url)
+        dom = BeautifulSoup(html.text, 'html.parser')
+
+        # Name
+        name = dom.select('h1#firstHeading')[0].get_text()
+
+        # Locations
+        locations = dom.select('aside[role="region"] div[data-source="location"] a')
+
+        return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
 
 
 class EnemyLocationScrapper(CsvScrapper):

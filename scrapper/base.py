@@ -4,7 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 
-from scrapper.util import CsvExporter, DataCleaner
+from scrapper.exporter import CsvExporter
+from scrapper.cleaner import DataCleaner
 
 """
 Base scrappers

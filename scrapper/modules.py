@@ -4,53 +4,14 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 
-
-class AsideDropScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(AsideDropScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        drops = dom.select('aside[role="region"] div[data-source="drops"] a')
-        drops = list(filter(lambda item: not 'None' == item['title'], drops))
-
-        return list(map(lambda location: {'actor': name, 'location': location['title']}, drops))
-
-
-class AsideLocationScrapper(object):
-    """
-    Dialogue scrapper.
-    """
-
-    def __init__(self):
-        super(AsideLocationScrapper, self).__init__()
-
-    def scrap(self, sub_url):
-        html = requests.get(sub_url)
-        dom = BeautifulSoup(html.text, 'html.parser')
-
-        # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
-
-        # Locations
-        locations = dom.select('aside[role="region"] div[data-source="location"] a')
-
-        return list(map(lambda location: {'actor': name, 'location': location['title']}, locations))
+"""
+Various modules which take care of small steps of the parsing process.
+"""
 
 
 class DescriptionScrapper(object):
     """
-    Scrapper for pages with description.
+    Scrapper for pages with a description.
     """
 
     def __init__(self):

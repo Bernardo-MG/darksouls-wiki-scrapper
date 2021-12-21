@@ -4,6 +4,7 @@ from scrapper.base import CsvScrapper, ListScrapper
 import requests
 from bs4 import BeautifulSoup
 import logging
+import re
 
 
 class StatsScrapper(object):
@@ -20,7 +21,7 @@ class StatsScrapper(object):
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Name
-        name = dom.select('h1#firstHeading')[0].get_text()
+        baseName = dom.select('h1#firstHeading')[0].get_text().strip()
 
         # Stats
         stats = []
@@ -43,8 +44,25 @@ class StatsScrapper(object):
                 else:
                     row_stats[col] = value
 
-            stats.append(row_stats)
+                if col == 'name':
+                    type = re.sub(' ' + baseName, '', row_stats['name'])
+                    type = re.sub(r'\+\d*', '', type)
+                    type = type.strip()
+                    if type == baseName:
+                        type = 'Standard'
+                    row_stats['type'] = type
 
+                    level = re.search(r'\+\d*', row_stats['name'])
+                    if level is None:
+                        level = '0'
+                    else:
+                        level = level.group(0)
+                    level = level.replace('+', '')
+                    row_stats['level'] = level
+
+                    row_stats['name'] = baseName
+
+            stats.append(row_stats)
 
         return stats
 
@@ -56,7 +74,7 @@ class WeaponStatsScrapper(CsvScrapper):
 
     def __init__(self, root_url):
         super(WeaponStatsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapon_stats.csv',
-                                                  ['name', 'physical', 'magic', 'fire', 'lightning', 'strength',
+                                                  ['name', 'type', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
                                                    'dexterity', 'intelligence', 'faith', 'physical_reduction',
                                                    'magic_reduction', 'fire_reduction', 'lightning_reduction'])
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))

@@ -7,13 +7,13 @@ import logging
 import re
 
 
-class StatsScrapper(object):
+class LevelsScrapper(object):
     """
     Scrapper for pages with a description.
     """
 
     def __init__(self):
-        super(StatsScrapper, self).__init__()
+        super(LevelsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def scrap(self, url):
@@ -60,16 +60,16 @@ class StatsScrapper(object):
         return stats
 
 
-class ArmorStatsScrapper(CsvScrapper):
+class ArmorLevelsScrapper(CsvScrapper):
     """
     Weapon list scrapper.
     """
 
     def __init__(self, root_url):
-        super(ArmorStatsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Armor', 'output/armor_stats.csv',
+        super(ArmorLevelsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Armor', 'output/armor_levels.csv',
                                                   ['name', 'level', 'regular', 'strike', 'slash', 'thrust', 'magic',
                                                    'fire', 'lightning', 'bleed', 'poison', 'curse'])
-        self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('a.category-page__member-link')

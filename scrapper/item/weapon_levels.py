@@ -7,13 +7,13 @@ import logging
 import re
 
 
-class StatsScrapper(object):
+class LevelsScrapper(object):
     """
     Scrapper for pages with a description.
     """
 
     def __init__(self):
-        super(StatsScrapper, self).__init__()
+        super(LevelsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def scrap(self, url):
@@ -67,17 +67,17 @@ class StatsScrapper(object):
         return stats
 
 
-class WeaponStatsScrapper(CsvScrapper):
+class WeaponLevelsScrapper(CsvScrapper):
     """
     Weapon list scrapper.
     """
 
     def __init__(self, root_url):
-        super(WeaponStatsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapon_stats.csv',
+        super(WeaponLevelsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapon_levels.csv',
                                                   ['name', 'type', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
                                                    'dexterity', 'intelligence', 'faith', 'physical_reduction',
                                                    'magic_reduction', 'fire_reduction', 'lightning_reduction'])
-        self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')

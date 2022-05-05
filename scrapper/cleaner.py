@@ -20,6 +20,7 @@ class DataCleaner:
     def clean_up(self, data):
         # Sorts data by defined key
         self.logger.debug('Sorting by column %s', self.key)
+        self.logger.debug('Sorting %s', data)
         data = sorted(data, key=lambda d: d[self.key])
 
         # Cleans up data

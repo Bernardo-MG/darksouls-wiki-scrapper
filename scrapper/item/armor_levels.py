@@ -23,6 +23,13 @@ class LevelsScrapper(object):
         # Name
         baseName = dom.select('h1#firstHeading')[0].get_text().strip()
 
+        # Poise
+        poiseData = dom.select('div.page.has-right-rail table.infobox2 tr:nth-of-type(10) td:nth-of-type(1)')
+        if len(poiseData) > 0:
+            poise = poiseData[0].get_text()
+        else:
+            poise = '0'
+
         # Stats
         stats = []
         stats_rows = dom.select('h2:has(span[id="Upgrades"]) + p + table tr:has(> td)')
@@ -54,6 +61,7 @@ class LevelsScrapper(object):
                     row_stats['level'] = level
 
                     row_stats['name'] = baseName
+                row_stats['poise'] = poise
 
             stats.append(row_stats)
 
@@ -68,7 +76,7 @@ class ArmorLevelsScrapper(CsvScrapper):
     def __init__(self, root_url):
         super(ArmorLevelsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Armor', 'output/armor_levels.csv',
                                                   ['name', 'level', 'regular', 'strike', 'slash', 'thrust', 'magic',
-                                                   'fire', 'lightning', 'bleed', 'poison', 'curse'])
+                                                   'fire', 'lightning', 'bleed', 'poison', 'curse', 'poise'])
         self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):

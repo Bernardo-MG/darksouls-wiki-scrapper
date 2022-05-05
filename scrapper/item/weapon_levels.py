@@ -23,6 +23,18 @@ class LevelsScrapper(object):
         # Name
         baseName = dom.select('h1#firstHeading')[0].get_text().strip()
 
+        # Static values
+        critical = dom.select('div.page.has-right-rail aside td[data-source="critical"]')
+        if len(critical) > 0:
+            critical = critical[0].get_text()
+        else:
+            critical = '0'
+        stability = dom.select('div.page.has-right-rail aside td[data-source="stability"]')
+        if len(stability) > 0:
+            stability = stability[0].get_text()
+        else:
+            stability = '0'
+
         # Stats
         stats = []
         stats_rows = dom.select('h2:has(span[id="Upgrades"]) + div tr:has(> td)')
@@ -62,6 +74,8 @@ class LevelsScrapper(object):
 
                     row_stats['name'] = baseName
 
+            row_stats['critical'] = critical
+            row_stats['stability'] = stability
             stats.append(row_stats)
 
         return stats
@@ -76,7 +90,8 @@ class WeaponLevelsScrapper(CsvScrapper):
         super(WeaponLevelsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapon_levels.csv',
                                                   ['name', 'type', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
                                                    'dexterity', 'intelligence', 'faith', 'physical_reduction',
-                                                   'magic_reduction', 'fire_reduction', 'lightning_reduction'])
+                                                   'magic_reduction', 'fire_reduction', 'lightning_reduction',
+                                                   'critical', 'stability'])
         self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):

@@ -35,6 +35,7 @@ class StatsScrapper(object):
 
         weight = ''
         durability = ''
+        type_name = ''
         attacks = ''
         for cell in data_cells:
             label = cell.select('.pi-data-label')[0].get_text()
@@ -43,6 +44,8 @@ class StatsScrapper(object):
                 weight = value
             elif label.lower() == 'durability':
                 durability = value
+            elif label.lower() == 'weapon type':
+                type_name = value
             elif label.lower() == 'attack type':
                 attacks = value.replace(' / ', '|')
 
@@ -88,31 +91,32 @@ class StatsScrapper(object):
 
         description = '\\n'.join(info)
 
-        return {'name': name, 'description': description, 'weight': weight, 'durability': durability,
+        return {'name': name, 'type': type_name, 'description': description, 'weight': weight, 'durability': durability,
                 'attacks': attacks,
                 'strength': strength, 'dexterity': dexterity, 'intelligence': intelligence, 'faith': faith,
-                'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus, 'intelligence_bonus': intelligence_bonus, 'faith_bonus': faith_bonus,
-                'physical_reduction': physical_reduction, 'magic_reduction': magic_reduction, 'fire_reduction': fire_reduction,
+                'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus,
+                'intelligence_bonus': intelligence_bonus, 'faith_bonus': faith_bonus,
+                'physical_reduction': physical_reduction, 'magic_reduction': magic_reduction,
+                'fire_reduction': fire_reduction,
                 'lightning_reduction': lightning_reduction, 'stability': stability,
-                'physical_dmg': physical, 'magic_dmg': magic, 'fire_dmg': fire, 'lightning_dmg': lightning, 'critical_dmg': critical}
+                'physical_dmg': physical, 'magic_dmg': magic, 'fire_dmg': fire, 'lightning_dmg': lightning,
+                'critical_dmg': critical}
 
 
-class CatalystScrapper(CsvScrapper):
+class ShieldScrapper(CsvScrapper):
     """
-    Catalyst list scrapper.
+    Armor list scrapper.
     """
 
     def __init__(self, root_url):
-        super(CatalystScrapper, self).__init__(root_url + '/wiki/Catalysts', 'output/catalysts.csv',
-                                                          ['name', 'description', 'weight', 'durability', 'attacks',
-                                                           'strength', 'dexterity', 'intelligence', 'faith',
-                                                           'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
-                                                           'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg', 'critical_dmg',
-                                                           'physical_reduction', 'magic_reduction', 'fire_reduction',
-                                                           'lightning_reduction', 'stability'])
+        super(ShieldScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shields.csv',
+                                             ['name', 'type', 'description', 'weight', 'durability', 'attacks',
+                                              'strength', 'dexterity', 'intelligence', 'faith',
+                                              'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
+                                              'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg', 'critical_dmg',
+                                              'physical_reduction', 'magic_reduction', 'fire_reduction',
+                                              'lightning_reduction', 'stability'])
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
-        result = dom.select('td:nth-of-type(1) a:has(> img)')
-
-        return list(filter(lambda item: not '(damage type)' in item['title'], result))
+        return dom.select('h2:has(> span#List_of_Shields) + table li a')

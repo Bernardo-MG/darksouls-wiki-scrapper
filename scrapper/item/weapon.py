@@ -81,13 +81,13 @@ class StatsScrapper(object):
                 'faith': faith}
 
 
-class WeaponDescriptionScrapper(CsvScrapper):
+class WeaponScrapper(CsvScrapper):
     """
     Weapon list scrapper.
     """
 
     def __init__(self, root_url):
-        super(WeaponDescriptionScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapons.csv',
+        super(WeaponScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapons.csv',
                                                         ['name', 'type', 'description', 'weight', 'durability', 'attacks',
                                                          'strength', 'dexterity', 'intelligence', 'faith'])
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))

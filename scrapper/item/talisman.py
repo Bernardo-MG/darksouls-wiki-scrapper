@@ -73,6 +73,12 @@ class StatsScrapper(object):
         intelligence = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="int-req"]')
         faith = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="fth-req"]')
 
+        # Bonus
+        strength_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="str-bonus"]')
+        dexterity_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="dex-bonus"]')
+        intelligence_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="int-bonus"]')
+        faith_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="fth-bonus"]')
+
         # Description
         description = dom.select('div.mainbg dd i')
         info = []
@@ -85,20 +91,22 @@ class StatsScrapper(object):
         return {'name': name, 'description': description, 'weight': weight, 'durability': durability,
                 'attacks': attacks,
                 'strength': strength, 'dexterity': dexterity, 'intelligence': intelligence, 'faith': faith,
+                'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus, 'intelligence_bonus': intelligence_bonus, 'faith_bonus': faith_bonus,
                 'physical_reduction': physical_reduction, 'magic_reduction': magic_reduction, 'fire_reduction': fire_reduction,
                 'lightning_reduction': lightning_reduction, 'stability': stability,
                 'physical_dmg': physical, 'magic_dmg': magic, 'fire_dmg': fire, 'lightning_dmg': lightning, 'critical_dmg': critical}
 
 
-class TalismanDescriptionScrapper(CsvScrapper):
+class TalismanScrapper(CsvScrapper):
     """
     Talisman list scrapper.
     """
 
     def __init__(self, root_url):
-        super(TalismanDescriptionScrapper, self).__init__(root_url + '/wiki/Talismans', 'output/talismans.csv',
+        super(TalismanScrapper, self).__init__(root_url + '/wiki/Talismans', 'output/talismans.csv',
                                                           ['name', 'description', 'weight', 'durability', 'attacks',
                                                            'strength', 'dexterity', 'intelligence', 'faith',
+                                                           'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
                                                            'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg',
                                                            'critical_dmg',
                                                            'physical_reduction', 'magic_reduction', 'fire_reduction',

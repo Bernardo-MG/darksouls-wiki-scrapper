@@ -12,17 +12,6 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def _selectValue(self, dom, selector):
-        value = dom.select(selector)
-        if len(value) > 0:
-            value = value[0].get_text()
-            if value == '-':
-                value = '0'
-        else:
-            value = '0'
-
-        return value
-
     def scrap(self, url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
@@ -56,31 +45,27 @@ class StatsScrapper(object):
         if attacks == '-':
             attacks = ''
 
-        # Damage
-        physical = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-physical"]')
-        magic = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-magic"]')
-        fire = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-fire"]')
-        lightning = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-lightning"]')
-        critical = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="critical"]')
-
-        # Defense
-        physical_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-physical"]')
-        magic_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-magic"]')
-        fire_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-fire"]')
-        lightning_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-lightning"]')
-        stability = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="stability"]')
-
         # Requirements
-        strength = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="str-req"]')
-        dexterity = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="dex-req"]')
-        intelligence = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="int-req"]')
-        faith = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="fth-req"]')
-
-        # Bonus
-        strength_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="str-bonus"]')
-        dexterity_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="dex-bonus"]')
-        intelligence_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="int-bonus"]')
-        faith_bonus = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="fth-bonus"]')
+        strength = dom.select('div.page.has-right-rail aside td[data-source="str-req"]')
+        if len(strength) > 0:
+            strength = strength[0].get_text()
+        else:
+            strength = ''
+        dexterity = dom.select('div.page.has-right-rail aside td[data-source="dex-req"]')
+        if len(dexterity) > 0:
+            dexterity = dexterity[0].get_text()
+        else:
+            dexterity = ''
+        intelligence = dom.select('div.page.has-right-rail aside td[data-source="int-req"]')
+        if len(intelligence) > 0:
+            intelligence = intelligence[0].get_text()
+        else:
+            intelligence = ''
+        faith = dom.select('div.page.has-right-rail aside td[data-source="fth-req"]')
+        if len(faith) > 0:
+            faith = faith[0].get_text()
+        else:
+            faith = ''
 
         # Description
         description = dom.select('div.mainbg dd i')
@@ -92,15 +77,8 @@ class StatsScrapper(object):
         description = '\\n'.join(info)
 
         return {'name': name, 'type': type_name, 'description': description, 'weight': weight, 'durability': durability,
-                'attacks': attacks,
-                'strength': strength, 'dexterity': dexterity, 'intelligence': intelligence, 'faith': faith,
-                'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus,
-                'intelligence_bonus': intelligence_bonus, 'faith_bonus': faith_bonus,
-                'physical_reduction': physical_reduction, 'magic_reduction': magic_reduction,
-                'fire_reduction': fire_reduction,
-                'lightning_reduction': lightning_reduction, 'stability': stability,
-                'physical_dmg': physical, 'magic_dmg': magic, 'fire_dmg': fire, 'lightning_dmg': lightning,
-                'critical_dmg': critical}
+                'attacks': attacks, 'strength': strength, 'dexterity': dexterity, 'intelligence': intelligence,
+                'faith': faith}
 
 
 class ShieldScrapper(CsvScrapper):
@@ -111,11 +89,7 @@ class ShieldScrapper(CsvScrapper):
     def __init__(self, root_url):
         super(ShieldScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shields.csv',
                                              ['name', 'type', 'description', 'weight', 'durability', 'attacks',
-                                              'strength', 'dexterity', 'intelligence', 'faith',
-                                              'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
-                                              'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg', 'critical_dmg',
-                                              'physical_reduction', 'magic_reduction', 'fire_reduction',
-                                              'lightning_reduction', 'stability'])
+                                                         'strength', 'dexterity', 'intelligence', 'faith'])
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):

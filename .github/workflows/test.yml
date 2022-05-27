@@ -3,8 +3,8 @@ name: Testing and validation
 on: [push, pull_request]
 
 jobs:
-  test:
-
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -30,6 +30,7 @@ jobs:
     needs: tests
     environment: deployment_site
     runs-on: ubuntu-latest
+
     steps:
     - name: Extract branch name
       shell: bash

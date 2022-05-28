@@ -49,23 +49,32 @@ class StatsScrapper(object):
         strength = dom.select('div.page.has-right-rail aside td[data-source="str-req"]')
         if len(strength) > 0:
             strength = strength[0].get_text()
+            if strength == '-':
+                strength = '0'
         else:
-            strength = ''
+            strength = '0'
         dexterity = dom.select('div.page.has-right-rail aside td[data-source="dex-req"]')
         if len(dexterity) > 0:
             dexterity = dexterity[0].get_text()
+            if dexterity == '-':
+                dexterity = '0'
         else:
-            dexterity = ''
+            dexterity = '0'
         intelligence = dom.select('div.page.has-right-rail aside td[data-source="int-req"]')
         if len(intelligence) > 0:
             intelligence = intelligence[0].get_text()
+            if intelligence == '-':
+                intelligence = '0'
         else:
-            intelligence = ''
+            intelligence = '0'
         faith = dom.select('div.page.has-right-rail aside td[data-source="fth-req"]')
+        self.logger.debug("Faith: %s", faith);
         if len(faith) > 0:
             faith = faith[0].get_text()
+            if faith == '-':
+                faith = '0'
         else:
-            faith = ''
+            faith = '0'
 
         # Description
         description = dom.select('div.mainbg dd i')

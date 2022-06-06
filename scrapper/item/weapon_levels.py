@@ -62,7 +62,7 @@ class LevelsScrapper(object):
                     type = type.strip()
                     if type == baseName:
                         type = 'Standard'
-                    row_stats['type'] = type
+                    row_stats['path'] = type
 
                     level = re.search(r'\+\d*', row_stats['name'])
                     if level is None:
@@ -88,7 +88,7 @@ class WeaponLevelsScrapper(CsvScrapper):
 
     def __init__(self, root_url):
         super(WeaponLevelsScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapon_levels.csv',
-                                                  ['name', 'type', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
+                                                  ['name', 'path', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
                                                    'dexterity', 'intelligence', 'faith', 'physical_reduction',
                                                    'magic_reduction', 'fire_reduction', 'lightning_reduction',
                                                    'critical', 'stability'])

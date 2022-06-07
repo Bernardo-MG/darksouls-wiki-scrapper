@@ -12,6 +12,16 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    def parse_number(self, node):
+        if len(node) > 0:
+            value = node[0].get_text()
+            if value == '-':
+                value = '0'
+        else:
+            value = '0'
+
+        return value
+
     def scrap(self, url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
@@ -47,25 +57,13 @@ class StatsScrapper(object):
 
         # Requirements
         strength = dom.select('div.page.has-right-rail aside td[data-source="str-req"]')
-        if len(strength) > 0:
-            strength = strength[0].get_text()
-        else:
-            strength = ''
+        strength = self.parse_number(strength)
         dexterity = dom.select('div.page.has-right-rail aside td[data-source="dex-req"]')
-        if len(dexterity) > 0:
-            dexterity = dexterity[0].get_text()
-        else:
-            dexterity = ''
+        dexterity = self.parse_number(dexterity)
         intelligence = dom.select('div.page.has-right-rail aside td[data-source="int-req"]')
-        if len(intelligence) > 0:
-            intelligence = intelligence[0].get_text()
-        else:
-            intelligence = ''
+        intelligence = self.parse_number(intelligence)
         faith = dom.select('div.page.has-right-rail aside td[data-source="fth-req"]')
-        if len(faith) > 0:
-            faith = faith[0].get_text()
-        else:
-            faith = ''
+        faith = self.parse_number(faith)
 
         # Description
         description = dom.select('div.mainbg dd i')

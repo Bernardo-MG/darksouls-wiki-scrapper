@@ -12,6 +12,16 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    def parse_number(self, node):
+        if len(node) > 0:
+            value = node[0].get_text()
+            if value == '-':
+                value = '0'
+        else:
+            value = '0'
+
+        return value
+
     def scrap(self, url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
@@ -47,34 +57,13 @@ class StatsScrapper(object):
 
         # Requirements
         strength = dom.select('div.page.has-right-rail aside td[data-source="str-req"]')
-        if len(strength) > 0:
-            strength = strength[0].get_text()
-            if strength == '-':
-                strength = '0'
-        else:
-            strength = '0'
+        strength = self.parse_number(strength)
         dexterity = dom.select('div.page.has-right-rail aside td[data-source="dex-req"]')
-        if len(dexterity) > 0:
-            dexterity = dexterity[0].get_text()
-            if dexterity == '-':
-                dexterity = '0'
-        else:
-            dexterity = '0'
+        dexterity = self.parse_number(dexterity)
         intelligence = dom.select('div.page.has-right-rail aside td[data-source="int-req"]')
-        if len(intelligence) > 0:
-            intelligence = intelligence[0].get_text()
-            if intelligence == '-':
-                intelligence = '0'
-        else:
-            intelligence = '0'
+        intelligence = self.parse_number(intelligence)
         faith = dom.select('div.page.has-right-rail aside td[data-source="fth-req"]')
-        self.logger.debug("Faith: %s", faith);
-        if len(faith) > 0:
-            faith = faith[0].get_text()
-            if faith == '-':
-                faith = '0'
-        else:
-            faith = '0'
+        faith = self.parse_number(faith)
 
         # Description
         description = dom.select('div.mainbg dd i')
@@ -98,7 +87,7 @@ class ShieldScrapper(CsvScrapper):
     def __init__(self, root_url):
         super(ShieldScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shields.csv',
                                              ['name', 'type', 'description', 'weight', 'durability', 'attacks',
-                                                         'strength', 'dexterity', 'intelligence', 'faith'])
+                                              'strength', 'dexterity', 'intelligence', 'faith'])
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):

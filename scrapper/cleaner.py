@@ -26,7 +26,8 @@ class DataCleaner:
         for item in cleaned:
             for key in item:
                 value = item[key]
-                value = value.strip()
+                if isinstance(value, str):
+                    value = value.strip()
                 item[key] = value
 
         return cleaned

@@ -52,7 +52,7 @@ class CsvScrapper(object):
 
         # Cleans up data
         self.logger.debug('Final data clean up')
-        self.cleaner.clean_up(data)
+        data = self.cleaner.clean_up(data)
 
         # Exports data
         self.logger.debug('Exporting data')

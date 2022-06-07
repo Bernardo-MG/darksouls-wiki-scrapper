@@ -20,11 +20,14 @@ class DataCleaner:
     def clean_up(self, data):
         # Sorts data by defined key
         self.logger.debug('Sorting by column %s', self.key)
-        data = sorted(data, key=lambda d: d[self.key])
+        cleaned = sorted(data, key=lambda d: d[self.key])
 
         # Cleans up data
-        for item in data:
+        for item in cleaned:
             for key in item:
                 value = item[key]
-                value = value.strip()
+                if isinstance(value, str):
+                    value = value.strip()
                 item[key] = value
+
+        return cleaned

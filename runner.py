@@ -4,7 +4,7 @@ import logging
 import configparser
 import os
 
-from scrapper.item.weapon_description import WeaponDescriptionScrapper
+from scrapper.item.shield import ShieldScrapper
 
 logging.basicConfig(
     filename='scrapper.log',
@@ -35,5 +35,5 @@ scrappers = []
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = WeaponDescriptionScrapper(url_root)
+parser = ShieldScrapper(url_root)
 parser.scrap()

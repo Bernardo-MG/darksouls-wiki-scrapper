@@ -3,6 +3,7 @@
 from scrapper.base import CsvScrapper, ListScrapper
 import requests
 from bs4 import BeautifulSoup
+import logging
 
 
 class LocationScrapper(object):

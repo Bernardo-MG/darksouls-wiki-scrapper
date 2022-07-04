@@ -53,5 +53,6 @@ class DialogueListScrapper(CsvScrapper):
                                                ['person', 'condition', 'exchange'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', DialogueScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         return dom.select('li a.category-page__member-link')

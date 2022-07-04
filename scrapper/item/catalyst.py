@@ -24,7 +24,8 @@ class CatalystScrapper(CsvScrapper):
                                                )
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')
 
         return list(filter(lambda item: not '(damage type)' in item['title'], result))

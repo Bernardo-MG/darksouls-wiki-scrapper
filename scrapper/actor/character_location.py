@@ -38,7 +38,8 @@ class CharacterLocationScrapper(CsvScrapper):
                                                ['actor', 'location'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', LocationScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         result = dom.select('li a.category-page__member-link')
 
         return list(filter(lambda item: not 'Thread:' in item['title'], result))

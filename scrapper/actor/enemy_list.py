@@ -13,7 +13,8 @@ class EnemyListScrapper(CsvScrapper):
         super(EnemyListScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Enemies', 'output/enemies.csv', ['name'])
         self.inner_parser = NameListScrapper(self._extract_links)
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         result = dom.select('li a.category-page__member-link')
 
         return list(filter(lambda item: not 'Thread:' in item['title'], result))

@@ -14,13 +14,13 @@ class DataCleaner:
     """
 
     def __init__(self, key):
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.key = key
+        self._logger = logging.getLogger(self.__class__.__name__)
+        self._key = key
 
     def clean_up(self, data):
         # Sorts data by defined key
-        self.logger.debug('Sorting by column %s', self.key)
-        cleaned = sorted(data, key=lambda d: d[self.key])
+        self._logger.debug('Sorting by column %s', self._key)
+        cleaned = sorted(data, key=lambda d: d[self._key])
 
         # Cleans up data
         for item in cleaned:

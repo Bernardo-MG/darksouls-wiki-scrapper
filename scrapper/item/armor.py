@@ -13,7 +13,8 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def scrap(self, url):
+    @staticmethod
+    def scrap(url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
@@ -59,5 +60,6 @@ class ArmorDescriptionScrapper(CsvScrapper):
                                                        ['name', 'set', 'description', 'weight', 'durability', 'type'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         return dom.select('table:not(:nth-of-type(1)) li a')

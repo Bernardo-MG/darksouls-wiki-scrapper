@@ -16,7 +16,8 @@ class LevelsScrapper(object):
         super(LevelsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def scrap(self, url):
+    @staticmethod
+    def scrap(url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
@@ -94,7 +95,8 @@ class WeaponLevelsScrapper(CsvScrapper):
                                                    'critical', 'stability'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')
         main_list = main_list + dom.select('h2:has(> span#Weapons) + table + table li a')
 

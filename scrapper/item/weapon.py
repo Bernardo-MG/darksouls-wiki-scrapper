@@ -12,7 +12,8 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def _selectValue(self, dom, selector):
+    @staticmethod
+    def _selectValue(dom, selector):
         value = dom.select(selector)
         if len(value) > 0:
             value = value[0].get_text()
@@ -23,7 +24,8 @@ class StatsScrapper(object):
 
         return value
 
-    def _selectText(self, dom, selector):
+    @staticmethod
+    def _selectText(dom, selector):
         value = dom.select(selector)
         if len(value) > 0:
             value = value[0].get_text()
@@ -128,7 +130,8 @@ class WeaponScrapper(CsvScrapper):
                                              )
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         main_list = dom.select('h2:has(> span#Weapons) + table li a')
         main_list = main_list + dom.select('h2:has(> span#Weapons) + table + table li a')
 

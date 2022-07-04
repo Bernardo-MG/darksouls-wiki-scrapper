@@ -2,7 +2,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-import logging
 
 """
 Various modules which take care of small steps of the parsing process.
@@ -16,9 +15,9 @@ class DescriptionScrapper(object):
 
     def __init__(self):
         super(DescriptionScrapper, self).__init__()
-        self.logger = logging.getLogger(self.__class__.__name__)
 
-    def scrap(self, url):
+    @staticmethod
+    def scrap(url):
         html = requests.get(url)
         dom = BeautifulSoup(html.text, 'html.parser')
 

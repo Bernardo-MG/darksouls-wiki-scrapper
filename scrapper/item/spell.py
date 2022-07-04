@@ -12,6 +12,7 @@ class StatsScrapper(object):
         super(StatsScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    @staticmethod
     def _select_value(self, dom, selector):
         value = dom.select(selector)
         if len(value) > 0:
@@ -78,7 +79,8 @@ class MagicScrapper(CsvScrapper):
                                                           'slots', 'uses'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         result = dom.select('li a.category-page__member-link')
 
         return list(filter(lambda item: not 'Category:' in item['title'], result))

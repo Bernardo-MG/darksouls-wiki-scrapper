@@ -15,7 +15,8 @@ class ShieldTypePieceScrapper(object):
     def __init__(self):
         super(ShieldTypePieceScrapper, self).__init__()
 
-    def scrap(self, sub_url):
+    @staticmethod
+    def scrap(sub_url):
         html = requests.get(sub_url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
@@ -39,5 +40,6 @@ class ShieldTypePiecesScrapper(CsvScrapper):
                                                      ['shield', 'type'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', ShieldTypePieceScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')

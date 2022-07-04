@@ -21,5 +21,6 @@ class ShieldScrapper(CsvScrapper):
                                              )
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
-    def _extract_links(self, dom):
+    @staticmethod
+    def _extract_links(dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')

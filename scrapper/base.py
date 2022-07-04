@@ -24,11 +24,11 @@ class CsvScrapper(object):
     """
 
     def __init__(self, url, output_file, headers):
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.url = url
-        self.exporter = CsvExporter(output_file, headers)
+        self._logger = logging.getLogger(self.__class__.__name__)
+        self._url = url
+        self._exporter = CsvExporter(output_file, headers)
         # Data sorted by the first header
-        self.cleaner = DataCleaner(headers[0])
+        self._cleaner = DataCleaner(headers[0])
         self._inner_parser = None
 
     @property
@@ -40,25 +40,25 @@ class CsvScrapper(object):
         self._inner_parser = parser
 
     def scrap(self):
-        self.logger.info('Scrapping %s', self.url)
+        self._logger.info('Scrapping %s', self._url)
 
         # Parses the DOM from the HTML page
-        html = requests.get(self.url)
+        html = requests.get(self._url)
         dom = BeautifulSoup(html.text, 'html.parser')
 
         # Transforms DOM into the output data
-        self.logger.debug('Transforming DOM')
+        self._logger.debug('Transforming DOM')
         data = self.inner_parser.scrap(dom)
 
         # Cleans up data
-        self.logger.debug('Final data clean up')
-        data = self.cleaner.clean_up(data)
+        self._logger.debug('Final data clean up')
+        data = self._cleaner.clean_up(data)
 
         # Exports data
-        self.logger.debug('Exporting data')
-        self.exporter.export(data)
+        self._logger.debug('Exporting data')
+        self._exporter.export(data)
 
-        self.logger.info('Finished scrapping %s', self.url)
+        self._logger.info('Finished scrapping %s', self._url)
 
 
 class ListScrapper(object):
@@ -68,27 +68,27 @@ class ListScrapper(object):
 
     def __init__(self, url, inner_page_scrapper, link_scrapper):
         super(ListScrapper, self).__init__()
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.url = url
-        self.inner_page_scrapper = inner_page_scrapper
-        self.link_scrapper = link_scrapper
+        self._logger = logging.getLogger(self.__class__.__name__)
+        self._url = url
+        self._inner_page_scrapper = inner_page_scrapper
+        self._link_scrapper = link_scrapper
 
     def scrap(self, dom):
-        main_list = self.link_scrapper(dom)
+        main_list = self._link_scrapper(dom)
 
         # Takes the relative path and appends it to the root URL
-        sub_urls = list(map(lambda item: self.url + item['href'], main_list))
+        sub_urls = list(map(lambda item: self._url + item['href'], main_list))
 
-        self.logger.info('Found %d inner pages to scrap', len(sub_urls))
-        self.logger.debug('Inner pages: %s', len(sub_urls))
+        self._logger.info('Found %d inner pages to scrap', len(sub_urls))
+        self._logger.debug('Inner pages: %s', len(sub_urls))
 
         # Scraps inner pages
         data = []
         for index, sub_url in enumerate(sub_urls):
             if index % 10 == 0:
-                self.logger.info('Scrapping URL %d of %d', index, len(sub_urls))
-            self.logger.debug('Scrapping inner page: %s', sub_url)
-            scrapped = self.inner_page_scrapper.scrap(sub_url)
+                self._logger.info('Scrapping URL %d of %d', index, len(sub_urls))
+            self._logger.debug('Scrapping inner page: %s', sub_url)
+            scrapped = self._inner_page_scrapper.scrap(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped
             else:

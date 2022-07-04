@@ -40,11 +40,11 @@ class MerchantItemsScrapper(CsvScrapper):
     Weapon type relationships scrapper.
     """
 
-    def __init__(self, root_url):
-        super(MerchantItemsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Merchants',
+    def __init__(self):
+        super(MerchantItemsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Merchants',
                                                      'output/merchant_items.csv',
                                                      ['merchant', 'item'])
-        self.inner_parser = ListScrapper(root_url, MerchantItemScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', MerchantItemScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

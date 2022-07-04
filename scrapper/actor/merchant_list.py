@@ -9,8 +9,8 @@ class MerchantListScrapper(CsvScrapper):
     Enemy list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(MerchantListScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Merchants', 'output/merchants.csv', ['name'])
+    def __init__(self):
+        super(MerchantListScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Merchants', 'output/merchants.csv', ['name'])
         self.inner_parser = NameListScrapper(self._extract_links)
 
     def _extract_links(self, dom):

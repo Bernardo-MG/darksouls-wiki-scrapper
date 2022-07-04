@@ -33,11 +33,11 @@ class ShieldTypePiecesScrapper(CsvScrapper):
     Shield type relationships scrapper.
     """
 
-    def __init__(self, root_url):
-        super(ShieldTypePiecesScrapper, self).__init__(root_url + '/wiki/Shields',
+    def __init__(self):
+        super(ShieldTypePiecesScrapper, self).__init__('https://darksouls.fandom.com/wiki/Shields',
                                                      'output/shields_shield_types.csv',
                                                      ['shield', 'type'])
-        self.inner_parser = ListScrapper(root_url, ShieldTypePieceScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', ShieldTypePieceScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')

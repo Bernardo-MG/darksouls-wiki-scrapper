@@ -38,11 +38,10 @@ class AdjacentLocationsScrapper(CsvScrapper):
     Armor set scrapper.
     """
 
-    def __init__(self, root_url):
-        super(AdjacentLocationsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Locations', 'output/adjacent_locations.csv',
+    def __init__(self):
+        super(AdjacentLocationsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Locations', 'output/adjacent_locations.csv',
                                                ['location', 'adjacent'])
-        self.root_url = root_url
-        self.inner_parser = ListScrapper(root_url, AdjacentLocationScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', AdjacentLocationScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

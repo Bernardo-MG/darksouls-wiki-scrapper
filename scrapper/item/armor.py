@@ -54,10 +54,10 @@ class ArmorDescriptionScrapper(CsvScrapper):
     Armor list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(ArmorDescriptionScrapper, self).__init__(root_url + '/wiki/Armor_(Dark_Souls)', 'output/armors.csv',
+    def __init__(self):
+        super(ArmorDescriptionScrapper, self).__init__('https://darksouls.fandom.com/wiki/Armor_(Dark_Souls)', 'output/armors.csv',
                                                        ['name', 'set', 'description', 'weight', 'durability', 'type'])
-        self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('table:not(:nth-of-type(1)) li a')

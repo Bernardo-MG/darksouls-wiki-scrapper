@@ -4,13 +4,17 @@ import logging
 import configparser
 import os
 
+from scrapper.item.catalyst import CatalystScrapper
 from scrapper.item.shield import ShieldScrapper
+from scrapper.item.shield_levels import ShieldLevelsScrapper
+from scrapper.item.talisman import TalismanScrapper
+from scrapper.item.weapon import WeaponScrapper
 
 logging.basicConfig(
     filename='scrapper.log',
     filemode='w',
     level=logging.DEBUG,
-    format = '%(asctime)s - %(name)s - %(levelname)s: %(message)s',
+    format='%(asctime)s - %(name)s - %(levelname)s: %(message)s',
 )
 logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
 
@@ -35,5 +39,5 @@ scrappers = []
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = ShieldScrapper(url_root)
+parser = TalismanScrapper()
 parser.scrap()

@@ -73,11 +73,11 @@ class ArmorLevelsScrapper(CsvScrapper):
     Weapon list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(ArmorLevelsScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Armor', 'output/armor_levels.csv',
+    def __init__(self):
+        super(ArmorLevelsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Armor', 'output/armor_levels.csv',
                                                   ['name', 'level', 'regular', 'strike', 'slash', 'thrust', 'magic',
                                                    'fire', 'lightning', 'bleed', 'poison', 'curse', 'poise'])
-        self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('a.category-page__member-link')

@@ -66,10 +66,10 @@ class ListScrapper(object):
     Scrapper for list pages. Takes all the links from a list, goes to each of them and scraps the target page.
     """
 
-    def __init__(self, root_url, inner_page_scrapper, link_scrapper):
+    def __init__(self, url, inner_page_scrapper, link_scrapper):
         super(ListScrapper, self).__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.root_url = root_url
+        self.url = url
         self.inner_page_scrapper = inner_page_scrapper
         self.link_scrapper = link_scrapper
 
@@ -77,7 +77,7 @@ class ListScrapper(object):
         main_list = self.link_scrapper(dom)
 
         # Takes the relative path and appends it to the root URL
-        sub_urls = list(map(lambda item: self.root_url + item['href'], main_list))
+        sub_urls = list(map(lambda item: self.url + item['href'], main_list))
 
         self.logger.info('Found %d inner pages to scrap', len(sub_urls))
         self.logger.debug('Inner pages: %s', len(sub_urls))

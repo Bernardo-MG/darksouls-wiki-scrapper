@@ -13,8 +13,8 @@ class TalismanScrapper(CsvScrapper):
     Talisman list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(TalismanScrapper, self).__init__(root_url + '/wiki/Talismans', 'output/talismans.csv',
+    def __init__(self):
+        super(TalismanScrapper, self).__init__('https://darksouls.fandom.com/wiki/Talismans', 'output/talismans.csv',
                                              ['name', 'type', 'description', 'weight', 'durability', 'attacks',
                                               'strength_requirement', 'dexterity_requirement', 'intelligence_requirement', 'faith_requirement',
                                               'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
@@ -22,7 +22,7 @@ class TalismanScrapper(CsvScrapper):
                                               'critical_damage', 'physical_reduction', 'magic_reduction', 'fire_reduction',
                                               'lightning_reduction', 'stability']
                                                )
-        self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('td:nth-of-type(1) a:has(> img)')

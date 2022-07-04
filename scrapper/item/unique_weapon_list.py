@@ -9,8 +9,8 @@ class UniqueWeaponScrapper(CsvScrapper):
     Unique weapon scrapper.
     """
 
-    def __init__(self, root_url):
-        super(UniqueWeaponScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Unique_Weapons', 'output/unique_weapons.csv', ['name'])
+    def __init__(self):
+        super(UniqueWeaponScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Unique_Weapons', 'output/unique_weapons.csv', ['name'])
         self.inner_parser = NameListScrapper(self._extract_links)
 
     def _extract_links(self, dom):

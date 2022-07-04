@@ -72,11 +72,11 @@ class MagicScrapper(CsvScrapper):
     Miracle list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(MagicScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Magic', 'output/spells.csv',
+    def __init__(self):
+        super(MagicScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Magic', 'output/spells.csv',
                                                          ['name', 'school', 'description', 'intelligence', 'faith',
                                                           'slots', 'uses'])
-        self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', StatsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

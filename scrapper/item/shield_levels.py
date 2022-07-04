@@ -86,13 +86,13 @@ class ShieldLevelsScrapper(CsvScrapper):
     Weapon list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(ShieldLevelsScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shield_levels.csv',
+    def __init__(self):
+        super(ShieldLevelsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Shields', 'output/shield_levels.csv',
                                                    ['name', 'path', 'level', 'physical', 'magic', 'fire', 'lightning',
                                                     'strength', 'dexterity', 'intelligence', 'faith', 'physical_reduction',
                                                     'magic_reduction', 'fire_reduction', 'lightning_reduction',
                                                     'critical', 'stability'])
-        self.inner_parser = ListScrapper(root_url, LevelsScrapper(), lambda dom: self._extract_links(dom))
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         return dom.select('h2:has(> span#List_of_Shields) + table li a')

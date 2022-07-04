@@ -9,9 +9,9 @@ class MiscellaneousItemDescriptionScrapper(CsvScrapper):
     Key item list scrapper.
     """
 
-    def __init__(self, root_url):
-        super(MiscellaneousItemDescriptionScrapper, self).__init__(root_url + '/wiki/Category:Dark_Souls:_Miscellaneous_Items', 'output/misc_items.csv', ['name', 'description'])
-        self.inner_parser = ListScrapper(root_url, DescriptionScrapper(), lambda dom: self._extract_links(dom))
+    def __init__(self):
+        super(MiscellaneousItemDescriptionScrapper, self).__init__('https://darksouls.fandom.com/wiki/Category:Dark_Souls:_Miscellaneous_Items', 'output/misc_items.csv', ['name', 'description'])
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', DescriptionScrapper(), lambda dom: self._extract_links(dom))
 
     def _extract_links(self, dom):
         result = dom.select('li a.category-page__member-link')

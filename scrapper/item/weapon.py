@@ -3,17 +3,15 @@
 from scrapper.base import CsvScrapper, ListScrapper
 import requests
 from bs4 import BeautifulSoup
-import logging
 
 
 class StatsScrapper(object):
 
     def __init__(self):
         super(StatsScrapper, self).__init__()
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     @staticmethod
-    def _selectValue(dom, selector):
+    def _select_value(dom, selector):
         value = dom.select(selector)
         if len(value) > 0:
             value = value[0].get_text()
@@ -25,7 +23,7 @@ class StatsScrapper(object):
         return value
 
     @staticmethod
-    def _selectText(dom, selector):
+    def _select_text(dom, selector):
         value = dom.select(selector)
         if len(value) > 0:
             value = value[0].get_text()
@@ -70,30 +68,30 @@ class StatsScrapper(object):
             attacks = ''
 
         # Damage
-        physical = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-physical"]')
-        magic = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-magic"]')
-        fire = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-fire"]')
-        lightning = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="atk-lightning"]')
-        critical = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="critical"]')
+        physical = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="atk-physical"]')
+        magic = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="atk-magic"]')
+        fire = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="atk-fire"]')
+        lightning = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="atk-lightning"]')
+        critical = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="critical"]')
 
         # Defense
-        physical_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-physical"]')
-        magic_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-magic"]')
-        fire_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-fire"]')
-        lightning_reduction = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="res-lightning"]')
-        stability = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="stability"]')
+        physical_reduction = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="res-physical"]')
+        magic_reduction = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="res-magic"]')
+        fire_reduction = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="res-fire"]')
+        lightning_reduction = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="res-lightning"]')
+        stability = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="stability"]')
 
         # Requirements
-        strength = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="str-req"]')
-        dexterity = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="dex-req"]')
-        intelligence = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="int-req"]')
-        faith = self._selectValue(dom, 'div.page.has-right-rail aside td[data-source="fth-req"]')
+        strength = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="str-req"]')
+        dexterity = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="dex-req"]')
+        intelligence = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="int-req"]')
+        faith = self._select_value(dom, 'div.page.has-right-rail aside td[data-source="fth-req"]')
 
         # Bonus
-        strength_bonus = self._selectText(dom, 'div.page.has-right-rail aside td[data-source="str-bonus"]')
-        dexterity_bonus = self._selectText(dom, 'div.page.has-right-rail aside td[data-source="dex-bonus"]')
-        intelligence_bonus = self._selectText(dom, 'div.page.has-right-rail aside td[data-source="int-bonus"]')
-        faith_bonus = self._selectText(dom, 'div.page.has-right-rail aside td[data-source="fth-bonus"]')
+        strength_bonus = self._select_text(dom, 'div.page.has-right-rail aside td[data-source="str-bonus"]')
+        dexterity_bonus = self._select_text(dom, 'div.page.has-right-rail aside td[data-source="dex-bonus"]')
+        intelligence_bonus = self._select_text(dom, 'div.page.has-right-rail aside td[data-source="int-bonus"]')
+        faith_bonus = self._select_text(dom, 'div.page.has-right-rail aside td[data-source="fth-bonus"]')
 
         # Description
         description = dom.select('div.mainbg dd i')

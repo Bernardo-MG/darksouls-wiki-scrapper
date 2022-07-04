@@ -40,7 +40,7 @@ class CsvScrapper(object):
         self._inner_parser = parser
 
     def scrap(self):
-        self._logger.info('Scrapping %s', self._url)
+        self._logger.info('Begins scrapping %s', self._url)
 
         # Parses the DOM from the HTML page
         html = requests.get(self._url)
@@ -74,6 +74,8 @@ class ListScrapper(object):
         self._link_scrapper = link_scrapper
 
     def scrap(self, dom):
+        self._logger.info('Scrapping links list')
+
         main_list = self._link_scrapper(dom)
 
         # Takes the relative path and appends it to the root URL
@@ -82,9 +84,9 @@ class ListScrapper(object):
         # Scraps inner pages
         data = []
         total = len(sub_urls)
-        self._logger.info('Found %d inner pages to scrap', total)
+        self._logger.info('Found %d links to scrap', total)
         for index, sub_url in enumerate(sub_urls):
-            self._logger.debug('Scrapping inner page (%d/%d): %s', index, total, sub_url)
+            self._logger.debug('Scrapping link (%d/%d): %s', index, total, sub_url)
             scrapped = self._inner_page_scrapper.scrap(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped

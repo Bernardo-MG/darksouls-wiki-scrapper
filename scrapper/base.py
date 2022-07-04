@@ -79,15 +79,12 @@ class ListScrapper(object):
         # Takes the relative path and appends it to the root URL
         sub_urls = list(map(lambda item: self._url + item['href'], main_list))
 
-        self._logger.info('Found %d inner pages to scrap', len(sub_urls))
-        self._logger.debug('Inner pages: %s', len(sub_urls))
-
         # Scraps inner pages
         data = []
+        total = len(sub_urls)
+        self._logger.info('Found %d inner pages to scrap', total)
         for index, sub_url in enumerate(sub_urls):
-            if index % 10 == 0:
-                self._logger.info('Scrapping URL %d of %d', index, len(sub_urls))
-            self._logger.debug('Scrapping inner page: %s', sub_url)
+            self._logger.debug('Scrapping inner page (%d/%d): %s', index, total, sub_url)
             scrapped = self._inner_page_scrapper.scrap(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped

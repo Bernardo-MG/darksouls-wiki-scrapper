@@ -13,10 +13,10 @@ class ShieldScrapper(CsvScrapper):
     def __init__(self, root_url):
         super(ShieldScrapper, self).__init__(root_url + '/wiki/Shields', 'output/shields.csv',
                                              ['name', 'type', 'description', 'weight', 'durability', 'attacks',
-                                              'strength', 'dexterity', 'intelligence', 'faith',
+                                              'strength_requirement', 'dexterity_requirement', 'intelligence_requirement', 'faith_requirement',
                                               'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
-                                              'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg',
-                                              'critical_dmg', 'physical_reduction', 'magic_reduction', 'fire_reduction',
+                                              'physical_damage', 'magic_damage', 'fire_damage', 'lightning_damage',
+                                              'critical_damage', 'physical_reduction', 'magic_reduction', 'fire_reduction',
                                               'lightning_reduction', 'stability']
                                              )
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))

@@ -103,13 +103,13 @@ class StatsScrapper(object):
         description = '\\n'.join(info)
 
         return {'name': name, 'type': type_name, 'description': description, 'weight': weight, 'durability': durability,
-                'attacks': attacks, 'strength': strength, 'dexterity': dexterity, 'intelligence': intelligence,
-                'faith': faith, 'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus,
+                'attacks': attacks, 'strength_requirement': strength, 'dexterity_requirement': dexterity, 'intelligence_requirement': intelligence,
+                'faith_requirement': faith, 'strength_bonus': strength_bonus, 'dexterity_bonus': dexterity_bonus,
                 'intelligence_bonus': intelligence_bonus, 'faith_bonus': faith_bonus,
                 'physical_reduction': physical_reduction, 'magic_reduction': magic_reduction,
                 'fire_reduction': fire_reduction, 'lightning_reduction': lightning_reduction, 'stability': stability,
-                'physical_dmg': physical, 'magic_dmg': magic, 'fire_dmg': fire, 'lightning_dmg': lightning,
-                'critical_dmg': critical}
+                'physical_damage': physical, 'magic_damage': magic, 'fire_damage': fire, 'lightning_damage': lightning,
+                'critical_damage': critical}
 
 
 class WeaponScrapper(CsvScrapper):
@@ -120,10 +120,10 @@ class WeaponScrapper(CsvScrapper):
     def __init__(self, root_url):
         super(WeaponScrapper, self).__init__(root_url + '/wiki/Weapons_(Dark_Souls)', 'output/weapons.csv',
                                              ['name', 'type', 'description', 'weight', 'durability', 'attacks',
-                                              'strength', 'dexterity', 'intelligence', 'faith',
+                                              'strength_requirement', 'dexterity_requirement', 'intelligence_requirement', 'faith_requirement',
                                               'strength_bonus', 'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
-                                              'physical_dmg', 'magic_dmg', 'fire_dmg', 'lightning_dmg',
-                                              'critical_dmg', 'physical_reduction', 'magic_reduction', 'fire_reduction',
+                                              'physical_damage', 'magic_damage', 'fire_damage', 'lightning_damage',
+                                              'critical_damage', 'physical_reduction', 'magic_reduction', 'fire_reduction',
                                               'lightning_reduction', 'stability']
                                              )
         self.inner_parser = ListScrapper(root_url, StatsScrapper(), lambda dom: self._extract_links(dom))

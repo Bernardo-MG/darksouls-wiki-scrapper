@@ -34,7 +34,7 @@ class AdjustmentScrapper(object):
             for j in range(1, attr_count):
                 value = values[j]
                 if value != '-' and value != '':
-                    result.append({'name': name, 'faith': attr[j], 'adjustment': value})
+                    result.append({'name': name, 'faith': attr[j], 'intelligence': 0, 'adjustment': value})
 
         return result
 
@@ -48,6 +48,6 @@ class TalismanAttributeAdjustmentScrapper(CsvScrapper):
         super(TalismanAttributeAdjustmentScrapper, self).__init__(
             'https://darksouls.wiki.fextralife.com/Faith-Int+Talisman+Magic+Adjustment+Values',
             'output/talisman_adjustments.csv',
-            ['name', 'faith', 'adjustment']
+            ['name', 'faith', 'intelligence', 'adjustment']
         )
         self.inner_parser = AdjustmentScrapper()

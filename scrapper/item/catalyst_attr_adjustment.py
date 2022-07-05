@@ -34,7 +34,7 @@ class AdjustmentScrapper(object):
             for j in range(1, attr_count):
                 value = values[j]
                 if value != '-' and value != '':
-                    result.append({'name': name, 'intelligence': attr[j], 'adjustment': value})
+                    result.append({'name': name, 'faith': 0, 'intelligence': attr[j], 'adjustment': value})
 
         return result
 
@@ -48,6 +48,6 @@ class CatalystAttributeAdjustmentScrapper(CsvScrapper):
         super(CatalystAttributeAdjustmentScrapper, self).__init__(
             'https://darksouls.wiki.fextralife.com/Int-Faith+Catalyst+Magic+Adjustment+Values',
             'output/catalyst_adjustments.csv',
-            ['name', 'intelligence', 'adjustment']
+            ['name', 'faith', 'intelligence', 'adjustment']
         )
         self.inner_parser = AdjustmentScrapper()

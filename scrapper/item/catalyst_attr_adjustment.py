@@ -33,7 +33,7 @@ class AdjustmentScrapper(object):
             values = list(map(lambda c: c.get_text(), values))
             for j in range(1, attr_count):
                 value = values[j]
-                if value != '-' and value != '':
+                if value != '-' and value.strip():
                     result.append({'name': name, 'faith': 0, 'intelligence': attr[j], 'adjustment': value})
 
         return result

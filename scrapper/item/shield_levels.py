@@ -89,10 +89,11 @@ class ShieldLevelsScrapper(CsvScrapper):
 
     def __init__(self):
         super(ShieldLevelsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Shields', 'output/shield_levels.csv',
-                                                   ['name', 'path', 'level', 'physical', 'magic', 'fire', 'lightning',
-                                                    'strength', 'dexterity', 'intelligence', 'faith', 'physical_reduction',
-                                                    'magic_reduction', 'fire_reduction', 'lightning_reduction',
-                                                    'critical', 'stability'])
+                                                   ['name', 'path', 'level', 'physical_damage', 'magic_damage',
+                                                    'fire_damage', 'lightning_damage', 'strength_bonus',
+                                                    'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
+                                                    'physical_reduction', 'magic_reduction', 'fire_reduction',
+                                                    'lightning_reduction', 'critical', 'stability'])
         self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(), lambda dom: self._extract_links(dom))
 
     @staticmethod

@@ -43,7 +43,8 @@ class LevelsScrapper(object):
             cells = row.select('td')
             cells = list(map(lambda cell: cell.contents[0], cells))
 
-            cols = ['name', 'physical', 'magic', 'fire', 'lightning', 'strength', 'dexterity', 'intelligence', 'faith',
+            cols = ['name', 'physical_damage', 'magic_damage', 'fire_damage', 'lightning_damage', 'strength_bonus',
+                    'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
                     'physical_reduction', 'magic_reduction', 'fire_reduction', 'lightning_reduction']
 
             cells_itr = iter(cells)
@@ -71,9 +72,12 @@ class LevelsScrapper(object):
                     else:
                         level = level.group(0)
                     level = level.replace('+', '')
-                    row_stats['level'] = level
 
+                    row_stats['level'] = level
                     row_stats['name'] = baseName
+                elif col.endswith("_bonus"):
+                    if row_stats[col] == '0':
+                        row_stats[col] = ''
 
             row_stats['critical'] = critical
             row_stats['stability'] = stability
@@ -88,12 +92,15 @@ class WeaponLevelsScrapper(CsvScrapper):
     """
 
     def __init__(self):
-        super(WeaponLevelsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Weapons_(Dark_Souls)', 'output/weapon_levels.csv',
-                                                  ['name', 'path', 'level', 'physical', 'magic', 'fire', 'lightning', 'strength',
-                                                   'dexterity', 'intelligence', 'faith', 'physical_reduction',
-                                                   'magic_reduction', 'fire_reduction', 'lightning_reduction',
-                                                   'critical', 'stability'])
-        self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(), lambda dom: self._extract_links(dom))
+        super(WeaponLevelsScrapper, self).__init__('https://darksouls.fandom.com/wiki/Weapons_(Dark_Souls)',
+                                                   'output/weapon_levels.csv',
+                                                   ['name', 'path', 'level', 'physical_damage', 'magic_damage',
+                                                    'fire_damage', 'lightning_damage', 'strength_bonus',
+                                                    'dexterity_bonus', 'intelligence_bonus', 'faith_bonus',
+                                                    'physical_reduction', 'magic_reduction', 'fire_reduction',
+                                                    'lightning_reduction', 'critical', 'stability'])
+        self.inner_parser = ListScrapper('https://darksouls.fandom.com', LevelsScrapper(),
+                                         lambda dom: self._extract_links(dom))
 
     @staticmethod
     def _extract_links(dom):

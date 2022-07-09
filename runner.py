@@ -11,6 +11,7 @@ from scrapper.item.shield_levels import ShieldLevelsScrapper
 from scrapper.item.talisman import TalismanScrapper
 from scrapper.item.talisman_attr_adjustment import TalismanAttributeAdjustmentScrapper
 from scrapper.item.weapon import WeaponScrapper
+from scrapper.item.weapon_levels import WeaponLevelsScrapper
 
 logging.basicConfig(
     filename='scrapper.log',
@@ -41,7 +42,5 @@ scrappers = []
 # parser = WeaponTypeScrapper(url_root)
 # parser.scrap()
 
-parser = TalismanAttributeAdjustmentScrapper()
-parser.scrap()
-parser = CatalystAttributeAdjustmentScrapper()
+parser = ShieldLevelsScrapper()
 parser.scrap()

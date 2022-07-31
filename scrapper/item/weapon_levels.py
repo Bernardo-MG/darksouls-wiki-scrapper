@@ -39,6 +39,8 @@ class LevelsScrapper(object):
         # Stats
         stats = []
         stats_rows = dom.select('h2:has(span[id="Upgrades"]) + div tr:has(> td)')
+        if not stats_rows:
+            stats_rows = dom.select('h2:has(span[id="Upgrades"]) + p + table tr:has(> td)')
         for row in stats_rows:
             cells = row.select('td')
             cells = list(map(lambda cell: cell.contents[0], cells))

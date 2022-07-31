@@ -86,7 +86,7 @@ class ListScrapper(object):
         total = len(sub_urls)
         self._logger.info('Found %d links to scrap', total)
         for index, sub_url in enumerate(sub_urls):
-            self._logger.debug('Scrapping link (%d/%d): %s', index, total, sub_url)
+            self._logger.debug('Scrapping link (%d/%d): %s', index + 1, total, sub_url)
             scrapped = self._inner_page_scrapper.scrap(sub_url)
             if isinstance(scrapped, list):
                 data = data + scrapped
